@@ -8,6 +8,7 @@ import ProfileStack from '../../router/ProfileStack';
 import { Home, Profile } from '../../views';
 import { styles } from './Navbar.styles';
 import { useAuth } from '../../context/AuthContext';
+import { SafeAreaView } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
@@ -29,26 +30,28 @@ export function NavBar() {
   const { authState } = useAuth();
 
   return (
-    <Tab.Navigator
-      initialRouteName="Inicio"
-      screenOptions={({ route }) => ({
-        headerShown: false,
-        tabBarIcon: ({ focused, color }) => getTabBarIcon(route, focused, color),
-        tabBarStyle: [{ display: 'flex', height: 65 }],
-        tabBarLabelStyle: [{ display: 'flex', fontSize: 13, marginBottom: 8 }],
-      })}
-    >
-      <Tab.Screen style={styles.iconStyle} name="Inicio" component={Home} />
-      <Tab.Screen
-        style={styles.iconStyle}
-        name="Cerca mío"
-        component={PropertiesStack}
-      />
-      <Tab.Screen
-        style={styles.iconStyle}
-        name={authState.authenticated ? 'Perfil' : 'Iniciar Sesion'}
-        component={authState.authenticated ? ProfileStack : AccountStack}
-      />
-    </Tab.Navigator>
+    <SafeAreaView style={{ flex: 1 }}>
+      <Tab.Navigator
+        initialRouteName="Inicio"
+        screenOptions={({ route }) => ({
+          headerShown: false,
+          tabBarIcon: ({ focused, color }) => getTabBarIcon(route, focused, color),
+          tabBarStyle: [{ display: 'flex', height: 65 }],
+          tabBarLabelStyle: [{ display: 'flex', fontSize: 13, marginBottom: 8 }],
+        })}
+      >
+        <Tab.Screen style={styles.iconStyle} name="Inicio" component={Home} />
+        <Tab.Screen
+          style={styles.iconStyle}
+          name="Cerca mío"
+          component={PropertiesStack}
+        />
+        <Tab.Screen
+          style={styles.iconStyle}
+          name={authState.authenticated ? 'Perfil' : 'Iniciar Sesion'}
+          component={authState.authenticated ? ProfileStack : AccountStack}
+        />
+      </Tab.Navigator>
+    </SafeAreaView>
   );
 }
