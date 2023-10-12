@@ -2,13 +2,13 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { SafeAreaView } from 'react-native';
 import PropertiesStack from '../../router/PropertyStack';
 import AccountStack from '../../router/SessionStack';
 import ProfileStack from '../../router/ProfileStack';
-import { Home, Profile } from '../../views';
+import { Home } from '../../views';
 import { styles } from './Navbar.styles';
 import { useAuth } from '../../context/AuthContext';
-import { SafeAreaView } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
