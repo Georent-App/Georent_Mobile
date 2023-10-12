@@ -1,0 +1,47 @@
+{
+  "expo": {
+    "scheme": "georent",
+    "owner": "georent",
+    "name": "GeoRent",
+    "slug": "GeoRent-Mobile",
+    "version": "1.0.0",
+    "orientation": "default",
+    "icon": "./assets/icon.png",
+    "primaryColor": "#ffffff",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "imageResizeMode": "contain",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "assets/**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "config": {
+        "usesNonExemptEncryption": false,
+        "googleMapsApiKey": "AIzaSyB8ZY1bvvsQpYvq9JFLcBUEY3QoyEwJchg"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.hebusch.GeoRentMobile",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyB8ZY1bvvsQpYvq9JFLcBUEY3QoyEwJchg"
+        }
+      }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "8fc22f1b-9fb9-498f-b791-6b5c5396e5cf"
+      },
+      "googleApiKey": "@env:GOOGLE_API_KEY"
+    }
+  }
+}

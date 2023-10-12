@@ -1,0 +1,319 @@
+/* eslint-disable react/no-array-index-key */
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, SafeAreaView } from 'react-native';
+import MapView from 'react-native-maps';
+import { StatusBar } from 'expo-status-bar';
+import SuperCluster from 'supercluster';
+import { useMapNearPosts } from '../../hooks/MapNearPosts';
+import { styles } from './Home.styles';
+import { mapStyle } from './mapStyle';
+import { Header } from '../../components/header/Header';
+import { LoadingScreen } from '../../components/loadingScreen/LoadingScreen';
+import MapPostPreview from '../../components/mapPostPreview/MapPostPreview';
+import { MapMarker } from '../../components/mapMarker/MapMarker';
+import ClusterMarker from '../../components/clusterMarker/ClusterMarker';
+import HomeFilters from '../../components/homeFilters/HomeFilters';
+import { Toast } from '../../components/Toast/Toast';
+
+import { calculateRadius } from '../../helpers/MapUtils';
+import { useLocation } from '../../context/LocationContext';
+import MapSearch from '../../components/mapSearch/MapSearch';
+
+const getRadius = (region) => {
+  if (!region.latitudeDelta || !region.longitudeDelta) {
+    return 1000;
+  }
+  return calculateRadius(region);
+};
+
+const getZoom = (region) => {
+  const angle = region.longitudeDelta;
+  const zoom = Math.round(Math.log(360 / angle) / Math.LN2);
+  return zoom;
+};
+
+const getClusterRadius = (zoom) => {
+  const radius = 50 / (zoom * zoom);
+  return radius * 50;
+};
+
+export function Home() {
+  const [posts, setPosts] = useState([]);
+  const [clusters, setClusters] = useState([]);
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [postPreviewOpen, setPostPreviewOpen] = useState(false);
+  const [mapSearchFocus, setMapSearchFocus] = useState(false);
+  const [currentRegion, setCurrentRegion] = useState(null);
+  const [filtersContainerActive, setFiltersContainerActive] = useState(false);
+  const [filtersLoading, setFiltersLoading] = useState(false);
+  const [filters, setFilters] = useState({
+    type: ['PROPERTY'],
+    categories: [],
+    fourStarsOnly: false,
+    availability: 'all',
+    singleBeds: '-',
+    doubleBeds: '-',
+  });
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const {
+    location, errorMsg, locationPermissionGranted, locationLoading,
+  } = useLocation();
+
+  const mapNearPosts = useMapNearPosts();
+  const postPreviewRef = useRef();
+  const mapRef = useRef();
+  const mapSearchRef = useRef();
+
+  const fetchNearPosts = async (region, newFilters) => {
+    try {
+      const radius = getRadius(region);
+      const response = await mapNearPosts(
+        region,
+        radius,
+        newFilters,
+      );
+      setPosts(response);
+    } catch (error) {
+      setIsError(true);
+      setErrorMessage('Error interno del servidor');
+    }
+  };
+
+  useEffect(() => {
+    if (errorMsg) {
+      setIsError(true);
+      setErrorMessage('Error al obtener la ubicación');
+    }
+    if (location) {
+      fetchNearPosts(location, filters);
+    }
+  }, [location, errorMsg]);
+
+  useEffect(() => {
+    if (!currentRegion) {
+      return;
+    }
+
+    const zoom = getZoom(currentRegion);
+    const radius = getClusterRadius(zoom);
+    const shouldCluster = currentRegion.latitudeDelta > 0.008;
+
+    if (shouldCluster) {
+      const cluster = new SuperCluster({
+        radius,
+        maxZoom: 15,
+      });
+
+      const points = posts.map((post) => ({
+        type: 'Feature',
+        properties: {
+          cluster: false,
+          post,
+        },
+        geometry: {
+          type: 'Point',
+          coordinates: [post.longitude, post.latitude],
+        },
+      }));
+
+      cluster.load(points);
+      const { longitude, latitude } = currentRegion;
+      const bounds = [
+        longitude - 5,
+        latitude - 5,
+        longitude + 5,
+        latitude + 5,
+      ];
+
+      const newClusters = cluster.getClusters(bounds, zoom);
+      setClusters(newClusters);
+    } else {
+      const newClusters = posts.map((post) => ({
+        properties: {
+          cluster: false,
+          point_count: 1,
+          post,
+        },
+        geometry: {
+          coordinates: [post.longitude, post.latitude],
+        },
+      }));
+      setClusters(newClusters);
+    }
+  }, [posts, location]);
+
+  const onRegionChange = (region) => {
+    setCurrentRegion(region);
+    fetchNearPosts(region, filters);
+  };
+
+  const onMarkerPress = (post) => {
+    setSelectedPost(post);
+    setPostPreviewOpen(true);
+    if (mapRef.current) {
+      mapRef.current.animateToRegion({
+        latitude: post.latitude,
+        longitude: post.longitude,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+      });
+    }
+    if (mapSearchRef.current) {
+      mapSearchRef.current.blur();
+      setMapSearchFocus(false);
+    }
+    setFiltersContainerActive(false);
+  };
+
+  const onMapSearchFocus = () => {
+    setMapSearchFocus(true);
+    if (postPreviewOpen) {
+      postPreviewRef.current.handleClose();
+    }
+    setFiltersContainerActive(false);
+  };
+
+  const onMapSearchBlur = () => {
+    setMapSearchFocus(false);
+  };
+
+  const goToSearchedLocation = (region) => {
+    if (mapRef.current) {
+      mapRef.current.animateToRegion({
+        latitude: region.lat,
+        longitude: region.lng,
+        latitudeDelta: 0.05,
+        longitudeDelta: 0.05,
+      });
+    }
+  };
+
+  const onClusterPress = (cluster) => {
+    const [longitude, latitude] = cluster.geometry.coordinates;
+
+    if (mapRef.current && currentRegion) {
+      const zoomInFactor = currentRegion.latitudeDelta * 0.85;
+      const minDelta = 0.01;
+
+      const latitudeDelta = Math.max(currentRegion.latitudeDelta - zoomInFactor, minDelta);
+      const longitudeDelta = Math.max(currentRegion.longitudeDelta - zoomInFactor, minDelta);
+
+      mapRef.current.animateToRegion({
+        latitude,
+        longitude,
+        latitudeDelta,
+        longitudeDelta,
+      });
+    }
+    setFiltersContainerActive(false);
+  };
+
+  const onMapPress = () => {
+    if (postPreviewOpen) {
+      postPreviewRef.current.handleClose();
+    }
+    if (mapSearchRef.current) {
+      mapSearchRef.current.blur();
+      setMapSearchFocus(false);
+    }
+    setFiltersContainerActive(false);
+  };
+
+  const onFiltersSubmit = async (newFilters) => {
+    setFiltersLoading(true);
+    await fetchNearPosts(currentRegion, newFilters);
+    setFilters(newFilters);
+    setFiltersLoading(false);
+  };
+
+  if (locationLoading) {
+    return (
+      <>
+        <StatusBar translucent={false} style="dark" backgroundColor="white" />
+        <Header />
+        <LoadingScreen />
+      </>
+    );
+  }
+
+  if (!locationPermissionGranted) {
+    return (
+      <SafeAreaView>
+        <StatusBar translucent={false} style="dark" backgroundColor="white" />
+        <Header />
+        <Text>
+          No se puede acceder a la ubicación del dispositivo.
+        </Text>
+      </SafeAreaView>
+    );
+  }
+
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <StatusBar translucent={false} style="dark" backgroundColor="white" />
+      <Toast message={errorMessage} isActive={isError} setIsActive={setIsError} isError />
+      <Header />
+      <HomeFilters
+        isActive={filtersContainerActive}
+        setIsActive={setFiltersContainerActive}
+        filtersLoading={filtersLoading}
+        filters={filters}
+        setFilters={setFilters}
+        onSubmit={onFiltersSubmit}
+      />
+      <View style={styles.mapContainer}>
+        <MapView
+          ref={mapRef}
+          provider="google"
+          style={styles.map}
+          customMapStyle={mapStyle}
+          region={location && {
+            latitude: location.latitude,
+            longitude: location.longitude,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01,
+          }}
+          onPress={onMapPress}
+          onRegionChangeComplete={(newRegion) => {
+            onRegionChange(newRegion);
+          }}
+          showsUserLocation
+        >
+          {clusters.map((item, index) => {
+            if (item.properties.cluster) {
+              const [longitude, latitude] = item.geometry.coordinates;
+              const count = item.properties.point_count;
+              return (
+                <ClusterMarker
+                  key={`cluster-${index}`}
+                  coordinate={{ longitude, latitude }}
+                  count={count}
+                  onMarkerPress={() => onClusterPress(item)}
+                />
+              );
+            }
+            const { post } = item.properties;
+            return (
+              <MapMarker post={post} onMarkerPress={onMarkerPress} key={index} />
+            );
+          })}
+        </MapView>
+        <MapPostPreview
+          ref={postPreviewRef}
+          isOpen={postPreviewOpen}
+          setIsOpen={setPostPreviewOpen}
+          post={selectedPost}
+        />
+        <MapSearch
+          ref={mapSearchRef}
+          goToSearchedLocation={goToSearchedLocation}
+          focus={mapSearchFocus}
+          onFocus={onMapSearchFocus}
+          onBlur={onMapSearchBlur}
+        />
+      </View>
+    </SafeAreaView>
+  );
+}
