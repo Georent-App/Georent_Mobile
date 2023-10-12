@@ -70,6 +70,15 @@ export function PropertyDetail() {
     setCurrentIndex(index);
   };
 
+  const checkIfAreImages = () => {
+    if (post.images === null) {
+      return false;
+    } if (post.images[0] === undefined) {
+      return false;
+    }
+    return true;
+  };
+
   if (loading) {
     return (
       <SafeAreaView style={{ flex: 1 }}>
@@ -87,7 +96,7 @@ export function PropertyDetail() {
         <BackButton backRoute="PropertiesIndex" />
         <ScrollView style={{ flex: 1 }}>
           <View style={styles.imageContainer}>
-            {postInfo.images[0] ? (
+            {checkIfAreImages() ? (
               <ScrollView
                 horizontal
                 pagingEnabled

@@ -46,6 +46,15 @@ const MapPostPreview = forwardRef(({ post, isOpen, setIsOpen }, ref) => {
     navigation.navigate('Cerca mío', { screen: 'PropertyDetail', params: { post } });
   };
 
+  const checkIfAreImages = () => {
+    if (post.images === null) {
+      return false;
+    } if (post.images[0] === undefined) {
+      return false;
+    }
+    return true;
+  };
+
   if (isOpen) {
     return (
       <Animatable.View
@@ -64,10 +73,10 @@ const MapPostPreview = forwardRef(({ post, isOpen, setIsOpen }, ref) => {
                 height: 120,
                 alignContent: 'center',
                 justifyContent: 'center',
-                paddingBottom: post.images[0] ? 0 : 20,
+                paddingBottom: checkIfAreImages() ? 0 : 20,
               }}
             >
-              {post.images.url ? (
+              {checkIfAreImages() ? (
                 <Image
                   style={{
                     width: 120,

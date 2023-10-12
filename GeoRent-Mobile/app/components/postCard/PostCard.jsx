@@ -20,6 +20,15 @@ export function PostCard({ post }) {
     navigation.navigate('PropertyDetail', { post });
   };
 
+  const checkIfAreImages = () => {
+    if (post.images === null) {
+      return false;
+    } if (post.images[0] === undefined) {
+      return false;
+    }
+    return true;
+  };
+
   return (
     <View style={styles.container}>
       <View
@@ -44,7 +53,7 @@ export function PostCard({ post }) {
           }
           return null;
         })()}
-        {post.images[0] ? (
+        {checkIfAreImages() ? (
           <Image
             source={{ uri: `${API_URL}${post.images[0].url}` }}
             style={styles.image}
