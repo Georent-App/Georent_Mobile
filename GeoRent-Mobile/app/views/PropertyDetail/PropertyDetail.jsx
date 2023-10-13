@@ -16,7 +16,7 @@ import axios from 'axios';
 import { BackButton } from '../../components/backButton/BackButton';
 import { styles } from './PropertyDetail.styles';
 import {
-  hacerLlamada, abrirWhatsApp, abrirEmail, abrirMapa,
+  hacerLlamada, abrirWhatsApp, abrirEmail, abrirMapa, abrirPaginaWeb,
 } from '../../helpers/RedirectContact';
 import { API_URL } from '../../constants';
 import PlaceholderImg from '../../../assets/placeholder-image.png';
@@ -25,6 +25,7 @@ import { ReportModal } from '../../components/ReportModal/ReportModal';
 import { RateModal } from '../../components/RateModal/RateModal';
 import { LoadingScreen } from '../../components/loadingScreen/LoadingScreen';
 import { addPointsToNumber } from '../../helpers/numberFormatter';
+import { useLocation } from '../../context/LocationContext';
 
 export function PropertyDetail() {
   const route = useRoute();
@@ -37,6 +38,8 @@ export function PropertyDetail() {
   const descriptionLimit = 100;
   const [loading, setLoading] = useState(true);
   const [postInfo, setPostInfo] = useState({});
+
+  const { location } = useLocation();
 
   useEffect(() => {
     const fetchReservations = async () => {
@@ -73,7 +76,7 @@ export function PropertyDetail() {
   const checkIfAreImages = () => {
     if (post.images === null) {
       return false;
-    } if (post.images[0] === undefined) {
+    } if (post.images.length === 0) {
       return false;
     }
     return true;
@@ -88,6 +91,15 @@ export function PropertyDetail() {
       </SafeAreaView>
     );
   }
+
+  const getPostAddressPlusDpto = (publicacion) => {
+    if (publicacion.address && publicacion.dpto) {
+      return `${publicacion.address}, ${publicacion.dpto}`;
+    } if (publicacion.address) {
+      return publicacion.address;
+    }
+    return '';
+  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -223,15 +235,16 @@ export function PropertyDetail() {
               <View style={styles.propertyInfoContainer}>
                 <View style={styles.footerItem}>
                   <Icon name="user" size={20} color="#696969" />
-                  <Text style={styles.footerText}>{postInfo.user_name}</Text>
+                  <Text style={styles.footerText}>{postInfo.contact_name}</Text>
                 </View>
                 <View style={styles.footerItem}>
                   <Icon name="map-marker" size={20} color="#696969" />
-                  <TouchableWithoutFeedback onPress={() => abrirMapa(postInfo.address)}>
+                  <TouchableWithoutFeedback onPress={
+                    () => abrirMapa(postInfo.latitude, postInfo.longitude, location)
+                  }
+                  >
                     <Text style={styles.footerText}>
-                      {postInfo.address.split(',')[1]
-                        ? `${postInfo.address.split(',')[1].trim()},${postInfo.address.split(',')[2]}`
-                        : `${postInfo.address.split(',')[0]}`}
+                      {getPostAddressPlusDpto(postInfo)}
                     </Text>
                   </TouchableWithoutFeedback>
                 </View>
@@ -256,6 +269,48 @@ export function PropertyDetail() {
                     <Text style={styles.footerText}>{postInfo.email}</Text>
                   </TouchableWithoutFeedback>
                 </View>
+                { postInfo.web_site
+                  && (
+                  <View
+                    style={styles.footerItem}
+                    onTouchEnd={
+                    () => abrirPaginaWeb(postInfo.web_site)
+                  }
+                  >
+                    <Icon name="link" size={20} color="#696969" />
+                    <TouchableWithoutFeedback>
+                      <Text style={styles.footerText}>{postInfo.web_site}</Text>
+                    </TouchableWithoutFeedback>
+                  </View>
+                  )}
+                { postInfo.social_network_1
+                  && (
+                  <View
+                    style={styles.footerItem}
+                    onTouchEnd={
+                    () => abrirPaginaWeb(postInfo.social_network_1)
+                  }
+                  >
+                    <Icon name="facebook" size={20} color="#696969" />
+                    <TouchableWithoutFeedback>
+                      <Text style={styles.footerText}>{postInfo.social_network_1}</Text>
+                    </TouchableWithoutFeedback>
+                  </View>
+                  )}
+                { postInfo.social_network_2
+                  && (
+                  <View
+                    style={styles.footerItem}
+                    onTouchEnd={
+                    () => abrirPaginaWeb(postInfo.social_network_2)
+                  }
+                  >
+                    <Icon name="instagram" size={20} color="#696969" />
+                    <TouchableWithoutFeedback>
+                      <Text style={styles.footerText}>{postInfo.social_network_2}</Text>
+                    </TouchableWithoutFeedback>
+                  </View>
+                  )}
               </View>
               <Card.Divider />
               <RateModal postId={postInfo.id} />

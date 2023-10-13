@@ -49,7 +49,7 @@ const MapPostPreview = forwardRef(({ post, isOpen, setIsOpen }, ref) => {
   const checkIfAreImages = () => {
     if (post.images === null) {
       return false;
-    } if (post.images[0] === undefined) {
+    } if (post.images.length === 0) {
       return false;
     }
     return true;
@@ -137,10 +137,10 @@ MapPostPreview.propTypes = {
     price: PropTypes.number.isRequired,
     address: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
-    images: PropTypes.PropTypes.shape({
+    images: PropTypes.arrayOf(PropTypes.shape({
       url: PropTypes.string.isRequired,
       id: PropTypes.number.isRequired,
-    }).isRequired,
+    })),
   }),
   isOpen: PropTypes.bool.isRequired,
   setIsOpen: PropTypes.func.isRequired,

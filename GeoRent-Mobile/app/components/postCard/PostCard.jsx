@@ -23,7 +23,7 @@ export function PostCard({ post }) {
   const checkIfAreImages = () => {
     if (post.images === null) {
       return false;
-    } if (post.images[0] === undefined) {
+    } if (post.images.length === 0) {
       return false;
     }
     return true;
@@ -112,7 +112,7 @@ PostCard.propTypes = {
     images: PropTypes.arrayOf(PropTypes.shape({
       url: PropTypes.string.isRequired,
       id: PropTypes.number.isRequired,
-    })).isRequired,
+    })),
     type: PropTypes.string.isRequired,
     category: PropTypes.string,
     name: PropTypes.string.isRequired,

@@ -1,8 +1,7 @@
-/* eslint-disable no-constant-condition */
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, Platform, View } from 'react-native';
 import PropertiesStack from '../../router/PropertyStack';
 import AccountStack from '../../router/SessionStack';
 import ProfileStack from '../../router/ProfileStack';
@@ -29,29 +28,37 @@ function getTabBarIcon(route, focused, color) {
 export function NavBar() {
   const { authState } = useAuth();
 
-  return (
+  const content = (
+    <Tab.Navigator
+      initialRouteName="Inicio"
+      screenOptions={({ route }) => ({
+        headerShown: false,
+        tabBarIcon: ({ focused, color }) => getTabBarIcon(route, focused, color),
+        tabBarStyle: [{ display: 'flex', height: 65 }],
+        tabBarLabelStyle: [{ display: 'flex', fontSize: 13, marginBottom: 8 }],
+      })}
+    >
+      <Tab.Screen style={styles.iconStyle} name="Inicio" component={Home} />
+      <Tab.Screen
+        style={styles.iconStyle}
+        name="Cerca mío"
+        component={PropertiesStack}
+      />
+      <Tab.Screen
+        style={styles.iconStyle}
+        name={authState.authenticated ? 'Perfil' : 'Iniciar Sesion'}
+        component={authState.authenticated ? ProfileStack : AccountStack}
+      />
+    </Tab.Navigator>
+  );
+
+  return Platform.OS === 'ios' ? (
     <SafeAreaView style={{ flex: 1 }}>
-      <Tab.Navigator
-        initialRouteName="Inicio"
-        screenOptions={({ route }) => ({
-          headerShown: false,
-          tabBarIcon: ({ focused, color }) => getTabBarIcon(route, focused, color),
-          tabBarStyle: [{ display: 'flex', height: 65 }],
-          tabBarLabelStyle: [{ display: 'flex', fontSize: 13, marginBottom: 8 }],
-        })}
-      >
-        <Tab.Screen style={styles.iconStyle} name="Inicio" component={Home} />
-        <Tab.Screen
-          style={styles.iconStyle}
-          name="Cerca mío"
-          component={PropertiesStack}
-        />
-        <Tab.Screen
-          style={styles.iconStyle}
-          name={authState.authenticated ? 'Perfil' : 'Iniciar Sesion'}
-          component={authState.authenticated ? ProfileStack : AccountStack}
-        />
-      </Tab.Navigator>
+      {content}
     </SafeAreaView>
+  ) : (
+    <View style={{ flex: 1 }}>
+      {content}
+    </View>
   );
 }
