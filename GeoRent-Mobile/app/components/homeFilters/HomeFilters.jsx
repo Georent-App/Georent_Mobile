@@ -22,6 +22,7 @@ import businessIcon from '../../../assets/Business-icon.png';
 import entertainmentIcon from '../../../assets/Entertainment-icon.png';
 import tradesAndServicesIcon from '../../../assets/TradesAndServices-icon.png';
 import { styles } from './HomeFilters.styles';
+import SliderTest from '../Slider/PirceSlider';
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -48,8 +49,10 @@ export default function HomeFilters(
   const [doubleBedsActive, setDoubleBedsActive] = useState(false);
   const [minPrice, setMinPrice] = useState(null);
   const [maxPrice, setMaxPrice] = useState(null);
-
   const menuScrollViewRef = useRef();
+  const minValue = 0;
+  const maxValue = 120000;
+  const [sliderValue, setSliderValue] = useState(maxValue);
 
   const sendFilters = (newFilters) => {
     onSubmit(newFilters);
@@ -115,6 +118,28 @@ export default function HomeFilters(
       },
     ).start();
   }, [isActive]);
+
+  const addPointsToNumber = (number) => {
+    if (number || number === 0) {
+      return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+    return null;
+  };
+
+  const handleSliderComplete = (value) => {
+    setSliderValue(value);
+    setMaxPrice(value);
+  };
+
+  const getSliderReferenceValues = (number) => {
+    const numberWithPoints = addPointsToNumber(number);
+    if (numberWithPoints.endsWith('.000')) {
+      return `${numberWithPoints.slice(0, -4)}K`;
+    } if (number < 1000) {
+      return `${number}`;
+    }
+    return `${numberWithPoints}`;
+  };
 
   return (
     <>
@@ -421,34 +446,32 @@ export default function HomeFilters(
                           </View>
                         </View>
                         <View style={styles.capacityContainer}>
-                          <Text style={[
-                            { textAlign: 'left', marginBottom: 10 }]}
-                          >
-                            Rango de Precio:
-
+                          <Text>
+                            {`Precio máximo: $${addPointsToNumber(sliderValue)}`}
                           </Text>
-                          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                            <Text>Desde: </Text>
-                            <TextInput
-                              style={{
-                                borderWidth: 1, borderColor: '#ccc', width: 60, padding: 1,
-                              }}
-                              keyboardType="numeric"
-                              value={minPrice}
-                              onChangeText={setMinPrice}
-                              placeholder="Min"
-                            />
-                            <Text> Hasta: </Text>
-                            <TextInput
-                              style={{
-                                borderWidth: 1, borderColor: '#ccc', width: 60, padding: 1,
-                              }}
-                              keyboardType="numeric"
-                              value={maxPrice}
-                              onChangeText={setMaxPrice}
-                              placeholder="Max"
-                            />
+                          <View style={[
+                            {
+                              display: 'flex', justifyContent: 'space-between', flexDirection: 'row', width: '98%', marginBottom: -10,
+                            }]}
+                          >
+                            <Text style={[{ fontSize: 12 }]}>
+                              {`$${addPointsToNumber(minValue)}`}
+                            </Text>
+                            <Text style={[{ fontSize: 12 }]}>
+                              {`$${addPointsToNumber(maxValue * 1 / 4)}`}
+                            </Text>
+                            <Text style={[{ fontSize: 12 }]}>
+                              {`$${addPointsToNumber(maxValue * 3 / 4)}`}
+                            </Text>
+                            <Text style={[{ fontSize: 12 }]}>
+                              {`$${addPointsToNumber(maxValue)}`}
+                            </Text>
                           </View>
+                          <SliderTest
+                            minValue={minValue}
+                            maxValue={maxValue}
+                            onSlidingComplete={handleSliderComplete}
+                          />
                         </View>
                       </View>
                     </Collapsible>
@@ -822,32 +845,26 @@ export default function HomeFilters(
                         </View>
                       </View>
                       <View style={styles.capacityContainer}>
-                        <Text style={[
-                          { textAlign: 'left', marginBottom: 10 }]}
-                        >
-                          Rango de Precio:
-
-                        </Text>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                          <Text>Desde: </Text>
-                          <TextInput
-                            style={{
-                              borderWidth: 1, borderColor: '#ccc', width: 60, padding: 1,
-                            }}
-                            keyboardType="numeric"
-                            value={minPrice}
-                            onChangeText={setMinPrice}
-                            placeholder="Min"
-                          />
-                          <Text> Hasta: </Text>
-                          <TextInput
-                            style={{
-                              borderWidth: 1, borderColor: '#ccc', width: 60, padding: 1,
-                            }}
-                            keyboardType="numeric"
-                            value={maxPrice}
-                            onChangeText={setMaxPrice}
-                            placeholder="Max"
+                        <View style={styles.capacityContainer}>
+                          <Text>
+                            {`Precio máximo: $${addPointsToNumber(sliderValue)}`}
+                          </Text>
+                          <View style={[
+                            {
+                              display: 'flex', justifyContent: 'space-between', flexDirection: 'row', width: '98%', marginBottom: -10,
+                            }]}
+                          >
+                            <Text>
+                              {`$${addPointsToNumber(minValue)}`}
+                            </Text>
+                            <Text>
+                              {`$${addPointsToNumber(maxValue)}`}
+                            </Text>
+                          </View>
+                          <SliderTest
+                            minValue={minValue}
+                            maxValue={maxValue}
+                            onSlidingComplete={handleSliderComplete}
                           />
                         </View>
                       </View>
