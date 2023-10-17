@@ -44,6 +44,7 @@ export function PropertiesIndex() {
     availability: 'all',
     singleBeds: '-',
     doubleBeds: '-',
+    maxPrice: '1000000',
   });
   const [isService, setIsService] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -61,6 +62,7 @@ export function PropertiesIndex() {
         availability: filts.availability,
         single_beds: filts.singleBeds === '-' ? -1 : filts.singleBeds,
         double_beds: filts.doubleBeds === '-' ? -1 : filts.doubleBeds,
+        max_price: filts.maxPrice ? filts.maxPrice : 0,
       };
       if (filts.type.includes('SERVICE')) {
         filtersForRequest.order = 'nearest';

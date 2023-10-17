@@ -53,9 +53,11 @@ export function Home() {
     availability: 'all',
     singleBeds: '-',
     doubleBeds: '-',
+    maxPrice: '0',
   });
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [postMaxPrice, setPostMaxPrice] = useState(0);
 
   const {
     location, errorMsg, locationPermissionGranted, locationLoading,
@@ -65,6 +67,14 @@ export function Home() {
   const postPreviewRef = useRef();
   const mapRef = useRef();
   const mapSearchRef = useRef();
+
+  const setPostMaxPriceFromPosts = () => {
+    if (posts.length === 0) {
+      return;
+    }
+    const maxPrice = Math.max(...posts.map((post) => post.price));
+    setPostMaxPrice(maxPrice);
+  };
 
   const fetchNearPosts = async (region, newFilters) => {
     try {
@@ -80,6 +90,12 @@ export function Home() {
       setErrorMessage('Error interno del servidor');
     }
   };
+
+  useEffect(() => {
+    if (posts.length > 0) {
+      setPostMaxPriceFromPosts();
+    }
+  }, [posts]);
 
   useEffect(() => {
     if (errorMsg) {
@@ -262,6 +278,7 @@ export function Home() {
         filters={filters}
         setFilters={setFilters}
         onSubmit={onFiltersSubmit}
+        postMaxPrice={postMaxPrice}
       />
       <View style={styles.mapContainer}>
         <MapView

@@ -1,25 +1,15 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import Slider from '@react-native-community/slider';
 import PropTypes from 'prop-types';
 import { styles } from './PriceSlider.styles';
 
-export default function SliderTest({ onValueChange, minValue, maxValue, onSlidingComplete }) {
-  const [evaluationValue, setEvaluationValue] = useState(maxValue);
-  const evaluationValueRef = useRef(evaluationValue);
-
-  useEffect(() => {
-    evaluationValueRef.current = evaluationValue;
-    if (onValueChange) {
-      onValueChange(evaluationValue);
-    }
-  }, [evaluationValue]);
-
+export default function SliderTest({ minValue, maxValue, onSlidingComplete }) {
   return (
     <Slider
-      value={evaluationValue}
+      value={maxValue}
       minimumValue={minValue}
       maximumValue={maxValue}
-      step={10000}
+      step={5000}
       style={styles.slider}
       onSlidingComplete={onSlidingComplete}
     />
@@ -27,7 +17,7 @@ export default function SliderTest({ onValueChange, minValue, maxValue, onSlidin
 }
 
 SliderTest.propTypes = {
-  onValueChange: PropTypes.func.isRequired,
   minValue: PropTypes.number.isRequired,
   maxValue: PropTypes.number.isRequired,
+  onSlidingComplete: PropTypes.func.isRequired,
 };

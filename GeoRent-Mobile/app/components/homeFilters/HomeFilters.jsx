@@ -28,7 +28,7 @@ const deviceWidth = Dimensions.get('window').width;
 
 export default function HomeFilters(
   {
-    isActive, setIsActive, onSubmit, filtersLoading, filters, setFilters,
+    isActive, setIsActive, onSubmit, filtersLoading, filters, setFilters, postMaxPrice,
   },
 ) {
   const [animation] = useState(
@@ -47,12 +47,10 @@ export default function HomeFilters(
   const [doubleBeds, setDoubleBeds] = useState('-');
   const [singleBedsActive, setSingleBedsActive] = useState(false);
   const [doubleBedsActive, setDoubleBedsActive] = useState(false);
-  const [minPrice, setMinPrice] = useState(null);
-  const [maxPrice, setMaxPrice] = useState(null);
+  const [maxPrice, setMaxPrice] = useState(0);
   const menuScrollViewRef = useRef();
   const minValue = 0;
-  const maxValue = 120000;
-  const [sliderValue, setSliderValue] = useState(maxValue);
+  const [sliderValue, setSliderValue] = useState(postMaxPrice);
 
   const sendFilters = (newFilters) => {
     onSubmit(newFilters);
@@ -97,7 +95,6 @@ export default function HomeFilters(
       availability,
       fourStarsOnly,
       categories,
-      minPrice,
       maxPrice,
     };
     setFilters(newFilters);
@@ -126,9 +123,17 @@ export default function HomeFilters(
     return null;
   };
 
+  const formatValue = (value) => {
+    if (value % 10 === 1 && value !== postMaxPrice) {
+      return value - 1;
+    }
+    return value;
+  };
+
   const handleSliderComplete = (value) => {
-    setSliderValue(value);
-    setMaxPrice(value);
+    const formattedValue = formatValue(value);
+    setSliderValue(formattedValue);
+    setMaxPrice(formattedValue);
   };
 
   const getSliderReferenceValues = (number) => {
@@ -449,30 +454,33 @@ export default function HomeFilters(
                           <Text>
                             {`Precio máximo: $${addPointsToNumber(sliderValue)}`}
                           </Text>
-                          <View style={[
-                            {
-                              display: 'flex', justifyContent: 'space-between', flexDirection: 'row', width: '98%', marginBottom: -10,
-                            }]}
+                          <View style={{
+                            flexDirection: 'row', width: '100%', alignItems: 'center', marginBottom: -10,
+                          }}
                           >
-                            <Text style={[{ fontSize: 12 }]}>
-                              {`$${addPointsToNumber(minValue)}`}
-                            </Text>
-                            <Text style={[{ fontSize: 12 }]}>
-                              {`$${addPointsToNumber(maxValue * 1 / 4)}`}
-                            </Text>
-                            <Text style={[{ fontSize: 12 }]}>
-                              {`$${addPointsToNumber(maxValue * 3 / 4)}`}
-                            </Text>
-                            <Text style={[{ fontSize: 12 }]}>
-                              {`$${addPointsToNumber(maxValue)}`}
-                            </Text>
+                            <View style={{ flex: 1, alignItems: 'flex-start' }}>
+                              <Text style={{ fontSize: 11 }}>
+                                {`$${addPointsToNumber(minValue)}`}
+                              </Text>
+                            </View>
+                            <View style={{ flex: 1, alignItems: 'center' }}>
+                              <Text style={{ fontSize: 11 }}>
+                                {`$${addPointsToNumber(postMaxPrice / 2)}`}
+                              </Text>
+                            </View>
+                            <View style={{ flex: 1, alignItems: 'flex-end' }}>
+                              <Text style={{ fontSize: 11 }}>
+                                {`$${addPointsToNumber(postMaxPrice)}`}
+                              </Text>
+                            </View>
                           </View>
                           <SliderTest
                             minValue={minValue}
-                            maxValue={maxValue}
+                            maxValue={postMaxPrice}
                             onSlidingComplete={handleSliderComplete}
                           />
                         </View>
+
                       </View>
                     </Collapsible>
                     <View style={styles.category}>
@@ -1106,4 +1114,5 @@ HomeFilters.propTypes = {
     categories: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
   setFilters: PropTypes.func.isRequired,
+  postMaxPrice: PropTypes.number.isRequired,
 };
