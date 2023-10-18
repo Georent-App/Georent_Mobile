@@ -53,7 +53,7 @@ export function Home() {
     availability: 'all',
     singleBeds: '-',
     doubleBeds: '-',
-    maxPrice: '0',
+    maxPrice: '-1',
   });
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
