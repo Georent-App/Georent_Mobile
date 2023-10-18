@@ -129,7 +129,11 @@ export default function IndexFilters({
   const handleSliderComplete = (value) => {
     const formattedValue = formatValue(value);
     setSliderValue(formattedValue);
-    setMaxPrice(formattedValue);
+    if (formattedValue >= sliderMaxValue) {
+      setMaxPrice(-1);
+    } else {
+      setMaxPrice(formattedValue);
+    }
   };
 
   return (
