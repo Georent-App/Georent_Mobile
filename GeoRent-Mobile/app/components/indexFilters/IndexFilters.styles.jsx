@@ -1,6 +1,6 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
-const windowHeight = Dimensions.get('window').height;
+const windowHeight = Dimensions.get('screen').height;
 const headerHeight = 70;
 const footerHeight = 65;
 const headerNavbarHeight = 65;
