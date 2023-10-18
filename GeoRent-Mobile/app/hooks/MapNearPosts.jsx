@@ -16,7 +16,7 @@ export function useMapNearPosts() {
       availability: filters.availability,
       single_beds: filters.singleBeds === '-' ? -1 : filters.singleBeds,
       double_beds: filters.doubleBeds === '-' ? -1 : filters.doubleBeds,
-      max_price: filters.maxPrice ? filters.maxPrice : -1,
+      max_price: filters.maxPrice || filters.maxPrice === 0 ? filters.maxPrice : -1,
     };
     const response = await axios.get(`${API_URL}/post/map-nearest`, {
       params,
