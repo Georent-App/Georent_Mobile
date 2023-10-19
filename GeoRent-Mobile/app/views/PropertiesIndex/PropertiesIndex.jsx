@@ -44,12 +44,22 @@ export function PropertiesIndex() {
     availability: 'all',
     singleBeds: '-',
     doubleBeds: '-',
+    maxPrice: '-1',
   });
   const [isService, setIsService] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [postMaxPrice, setPostMaxPrice] = useState(0);
 
   const scrollViewRef = useRef();
+
+  const setPostMaxPriceFromPosts = () => {
+    if (posts.length === 0) {
+      return;
+    }
+    const maxPrice = Math.max(...posts.map((post) => post.price));
+    setPostMaxPrice(maxPrice);
+  };
 
   async function fetchPosts(loc, rad, page, filts) {
     try {
@@ -61,6 +71,7 @@ export function PropertiesIndex() {
         availability: filts.availability,
         single_beds: filts.singleBeds === '-' ? -1 : filts.singleBeds,
         double_beds: filts.doubleBeds === '-' ? -1 : filts.doubleBeds,
+        max_price: filts.maxPrice ? filts.maxPrice : 0,
       };
       if (filts.type.includes('SERVICE')) {
         filtersForRequest.order = 'nearest';
@@ -84,6 +95,12 @@ export function PropertiesIndex() {
       return [];
     }
   }
+
+  useEffect(() => {
+    if (posts.length > 0) {
+      setPostMaxPriceFromPosts();
+    }
+  }, [posts]);
 
   const loadMorePosts = async () => {
     if (isLoadingMore) return;
@@ -184,6 +201,7 @@ export function PropertiesIndex() {
           filtersLoading={filtersLoading}
           onSubmit={handleFiltersSubmit}
           isService={isService}
+          postMaxPrice={postMaxPrice}
         />
         <ScrollView
           ref={scrollViewRef}
