@@ -279,6 +279,7 @@ export function Home() {
         setFilters={setFilters}
         onSubmit={onFiltersSubmit}
         postMaxPrice={postMaxPrice}
+        posts={posts}
       />
       <View style={styles.mapContainer}>
         <MapView

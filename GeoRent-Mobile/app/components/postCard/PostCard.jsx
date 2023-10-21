@@ -109,10 +109,16 @@ export function PostCard({ post }) {
 PostCard.propTypes = {
   post: PropTypes.shape({
     id: PropTypes.number.isRequired,
-    images: PropTypes.arrayOf(PropTypes.shape({
-      url: PropTypes.string.isRequired,
-      id: PropTypes.number.isRequired,
-    })),
+    images: PropTypes.oneOfType([
+      PropTypes.shape({
+        id: PropTypes.number,
+        url: PropTypes.string,
+      }),
+      PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number,
+        url: PropTypes.string,
+      })),
+    ]),
     type: PropTypes.string.isRequired,
     category: PropTypes.string,
     name: PropTypes.string.isRequired,
