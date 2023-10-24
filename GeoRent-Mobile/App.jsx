@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { NavBar } from './app/components/navbar/Navbar';
 import { AuthProvider } from './app/context/AuthContext';
 import { LocationProvider } from './app/context/LocationContext';
-import config from './aws-exports';
+import config from './awss-exports';
 
 Amplify.configure(config);
 export default function App() {
