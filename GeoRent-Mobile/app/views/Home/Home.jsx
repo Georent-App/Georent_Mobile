@@ -14,10 +14,10 @@ import { MapMarker } from '../../components/mapMarker/MapMarker';
 import ClusterMarker from '../../components/clusterMarker/ClusterMarker';
 import HomeFilters from '../../components/homeFilters/HomeFilters';
 import { Toast } from '../../components/Toast/Toast';
-
 import { calculateRadius } from '../../helpers/MapUtils';
 import { useLocation } from '../../context/LocationContext';
 import MapSearch from '../../components/mapSearch/MapSearch';
+import searchPostByContent from '../../helpers/searchPostByContent';
 
 const getRadius = (region) => {
   if (!region.latitudeDelta || !region.longitudeDelta) {
@@ -55,6 +55,7 @@ export function Home() {
     doubleBeds: '-',
     maxPrice: '-1',
   });
+  const [contentSearch, setContentSearch] = useState('');
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [postMaxPrice, setPostMaxPrice] = useState(0);
@@ -84,7 +85,8 @@ export function Home() {
         radius,
         newFilters,
       );
-      setPosts(response);
+      const postFilteredByContent = searchPostByContent(response, contentSearch);
+      setPosts(postFilteredByContent);
     } catch (error) {
       setIsError(true);
       setErrorMessage('Error interno del servidor');
@@ -280,6 +282,7 @@ export function Home() {
         onSubmit={onFiltersSubmit}
         postMaxPrice={postMaxPrice}
         posts={posts}
+        setContentSearch={setContentSearch}
       />
       <View style={styles.mapContainer}>
         <MapView

@@ -27,7 +27,8 @@ const deviceWidth = Dimensions.get('window').width;
 
 export default function HomeFilters(
   {
-    isActive, setIsActive, onSubmit, filtersLoading, filters, setFilters, postMaxPrice, posts,
+    isActive, setIsActive, onSubmit, filtersLoading,
+    filters, setFilters, postMaxPrice, setContentSearch,
   },
 ) {
   const [animation] = useState(
@@ -51,7 +52,7 @@ export default function HomeFilters(
   const minValue = 0;
   const [sliderValue, setSliderValue] = useState(0);
   const [sliderMaxValue, setSliderMaxValue] = useState(0);
-  const [contentSearch, setContentSearch] = useState('');
+  const [contentSearchView, setContentSearchView] = useState('');
 
   const sendFilters = (newFilters) => {
     onSubmit(newFilters);
@@ -146,6 +147,11 @@ export default function HomeFilters(
     } else {
       setMaxPrice(formattedValue);
     }
+  };
+
+  const contentFilterHandler = (text) => {
+    setContentSearchView(text);
+    setContentSearch(text);
   };
 
   const headerNavbarView = (
@@ -308,8 +314,8 @@ export default function HomeFilters(
       >
         <SearchBar
           placeholder="Buscar contenido"
-          value={contentSearch}
-          onChangeText={setContentSearch}
+          value={contentSearchView}
+          onChangeText={contentFilterHandler}
           containerStyle={{
             backgroundColor: 'transparent',
             borderTopWidth: 0,
@@ -762,27 +768,5 @@ HomeFilters.propTypes = {
   }).isRequired,
   setFilters: PropTypes.func.isRequired,
   postMaxPrice: PropTypes.number.isRequired,
-  posts: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number,
-    name: PropTypes.string,
-    description: PropTypes.string,
-    latitude: PropTypes.number.isRequired,
-    longitude: PropTypes.number.isRequired,
-    price: PropTypes.number,
-    type: PropTypes.string,
-    address: PropTypes.string,
-    dpto: PropTypes.string,
-    category: PropTypes.string,
-    creation_date: PropTypes.string,
-    images: PropTypes.oneOfType([
-      PropTypes.shape({
-        id: PropTypes.number,
-        url: PropTypes.string,
-      }),
-      PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.number,
-        url: PropTypes.string,
-      })),
-    ]),
-  })).isRequired,
+  setContentSearch: PropTypes.func.isRequired,
 };
