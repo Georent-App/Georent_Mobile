@@ -14,7 +14,7 @@ import {
 import Slider from '@react-native-community/slider';
 import PropTypes from 'prop-types';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { Button, CheckBox } from 'react-native-elements';
+import { Button, CheckBox, SearchBar } from 'react-native-elements';
 import Collapsible from 'react-native-collapsible';
 import campingIcon from '../../../assets/Camping-icon.png';
 import foodIcon from '../../../assets/Food-icon.png';
@@ -26,9 +26,12 @@ import { styles } from './IndexFilters.styles';
 
 const deviceWidth = Dimensions.get('window').width;
 
-export default function IndexFilters({
-  isActive, setIsActive, onSubmit, filtersLoading, isService, postMaxPrice,
-}) {
+export default function IndexFilters(
+  {
+    isActive, setIsActive, onSubmit, filtersLoading, isService, postMaxPrice,
+    setContentSearch,
+  },
+) {
   const [animation] = useState(
     new Animated.Value(isActive ? 0 : -deviceWidth),
   );
@@ -50,6 +53,8 @@ export default function IndexFilters({
   const [maxPrice, setMaxPrice] = useState(-1);
   const [sliderValue, setSliderValue] = useState(0);
   const [sliderMaxValue, setSliderMaxValue] = useState(0);
+  const [contentSearchView, setContentSearchView] = useState('');
+
   const minValue = 0;
 
   const handleOrderChange = useCallback(
@@ -136,6 +141,11 @@ export default function IndexFilters({
     }
   };
 
+  const contentFilterHandler = (text) => {
+    setContentSearchView(text);
+    setContentSearch(text);
+  };
+
   const topSideBarView = (
     <View style={styles.row}>
       <Text style={styles.titleText}>
@@ -156,6 +166,25 @@ export default function IndexFilters({
         contentContainerStyle={styles.scrollView}
         showsVerticalScrollIndicator={false}
       >
+        <SearchBar
+          placeholder="Buscar contenido"
+          value={contentSearchView}
+          onChangeText={contentFilterHandler}
+          containerStyle={{
+            backgroundColor: 'transparent',
+            borderTopWidth: 0,
+            borderBottomWidth: 0,
+          }}
+          inputStyle={{
+            backgroundColor: 'transparent',
+            fontSize: 13,
+            color: 'black',
+          }}
+          inputContainerStyle={{
+            backgroundColor: 'rgba(128, 128, 128, 0.1)',
+          }}
+          round
+        />
         <View>
           <Text>
             Radio de búsqueda:
@@ -617,4 +646,5 @@ IndexFilters.propTypes = {
   filtersLoading: PropTypes.bool.isRequired,
   isService: PropTypes.bool.isRequired,
   postMaxPrice: PropTypes.number.isRequired,
+  setContentSearch: PropTypes.func.isRequired,
 };

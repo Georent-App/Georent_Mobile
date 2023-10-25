@@ -73,6 +73,16 @@ export default function HomeFilters(
     if (filter === 'availability') {
       newFilters[filter] = 'all';
     }
+    if (element === 'singleBeds') {
+      newFilters[element] = '-';
+      setSingleBedsActive(false);
+      setSingleBeds('-');
+    }
+    if (element === 'doubleBeds') {
+      newFilters[element] = '-';
+      setDoubleBedsActive(false);
+      setDoubleBeds('-');
+    }
     setFilters(newFilters);
     if (filter === 'type') {
       setType(newFilters[filter]);
@@ -203,6 +213,7 @@ export default function HomeFilters(
                           name={`Camas Simples: ${filters.singleBeds}`}
                           icon="bed-outline"
                           type="primary"
+                          onClose={() => removeFilter(filter, 'singleBeds')}
                         />
                       </View>,
                     );
@@ -214,6 +225,7 @@ export default function HomeFilters(
                           name={`Camas Dobles: ${filters.doubleBeds}`}
                           icon="bed-outline"
                           type="primary"
+                          onClose={() => removeFilter(filter, 'doubleBeds')}
                         />
                       </View>,
                     );
@@ -305,7 +317,7 @@ export default function HomeFilters(
     </View>
   );
 
-  const scorllViewContent = (
+  const scrollViewContent = (
     <View style={styles.column}>
       <ScrollView
         vertical
@@ -736,7 +748,7 @@ export default function HomeFilters(
         <Animated.View style={{ ...styles.filtersContainer, left: animation }}>
           {topSideBarView}
           <SafeAreaView style={{ flex: 1 }}>
-            {scorllViewContent}
+            {scrollViewContent}
           </SafeAreaView>
         </Animated.View>
       </>
@@ -747,7 +759,7 @@ export default function HomeFilters(
       {headerNavbarView}
       <Animated.View style={{ ...styles.filtersContainer, left: animation }}>
         {topSideBarView}
-        {scorllViewContent}
+        {scrollViewContent}
       </Animated.View>
     </>
   );

@@ -21,6 +21,7 @@ import { useLocation } from '../../context/LocationContext';
 import { useNearPosts } from '../../hooks/NearPosts';
 import IndexFilters from '../../components/indexFilters/IndexFilters';
 import { Toast } from '../../components/Toast/Toast';
+import searchPostByContent from '../../helpers/searchPostByContent';
 
 export function PropertiesIndex() {
   const [loading, setLoading] = useState(true);
@@ -46,6 +47,7 @@ export function PropertiesIndex() {
     doubleBeds: '-',
     maxPrice: '-1',
   });
+  const [contentSearch, setContentSearch] = useState('');
   const [isService, setIsService] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -137,7 +139,8 @@ export function PropertiesIndex() {
       setCurrentRadius(newFilters.radius);
       setCurrentPage(1);
       const newPosts = await fetchPosts(location, newFilters.radius, 1, newFilters);
-      setPosts(newPosts);
+      const postFilteredByContent = searchPostByContent(newPosts, contentSearch);
+      setPosts(postFilteredByContent);
       setFiltersLoading(false);
       scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: true });
     } catch (error) {
@@ -202,6 +205,7 @@ export function PropertiesIndex() {
           onSubmit={handleFiltersSubmit}
           isService={isService}
           postMaxPrice={postMaxPrice}
+          setContentSearch={setContentSearch}
         />
         <ScrollView
           ref={scrollViewRef}

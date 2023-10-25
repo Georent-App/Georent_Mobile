@@ -281,7 +281,6 @@ export function Home() {
         setFilters={setFilters}
         onSubmit={onFiltersSubmit}
         postMaxPrice={postMaxPrice}
-        posts={posts}
         setContentSearch={setContentSearch}
       />
       <View style={styles.mapContainer}>

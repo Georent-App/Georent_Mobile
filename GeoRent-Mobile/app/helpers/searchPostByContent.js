@@ -1,7 +1,6 @@
 import Fuse from 'fuse.js';
 
 function verifyInputs(posts, searchValue) {
-
   if (!Array.isArray(posts) || typeof searchValue !== 'string' || !searchValue.trim()) return false;
   return true;
 }
