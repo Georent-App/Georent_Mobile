@@ -85,7 +85,10 @@ export function Home() {
         radius,
         newFilters,
       );
-      const postFilteredByContent = searchPostByContent(response, contentSearch);
+      if (newFilters.contentSearch === '') {
+        setContentSearch('');
+      }
+      const postFilteredByContent = searchPostByContent(response, newFilters.contentSearch);
       setPosts(postFilteredByContent);
     } catch (error) {
       setIsError(true);
@@ -241,6 +244,9 @@ export function Home() {
 
   const onFiltersSubmit = async (newFilters) => {
     setFiltersLoading(true);
+    if (newFilters.contentSearch === '') {
+      setContentSearch('');
+    }
     await fetchNearPosts(currentRegion, newFilters);
     setFilters(newFilters);
     setFiltersLoading(false);

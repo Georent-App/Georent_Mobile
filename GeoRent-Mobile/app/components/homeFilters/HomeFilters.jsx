@@ -53,9 +53,15 @@ export default function HomeFilters(
   const [sliderValue, setSliderValue] = useState(0);
   const [sliderMaxValue, setSliderMaxValue] = useState(0);
   const [contentSearchView, setContentSearchView] = useState('');
+  const [showContentSearchFilter, setShowContentSearchFilter] = useState(false);
 
   const sendFilters = (newFilters) => {
     onSubmit(newFilters);
+  };
+
+  const contentFilterHandler = (text) => {
+    setContentSearchView(text);
+    setContentSearch(text);
   };
 
   const removeFilter = (filter, element = null) => {
@@ -83,6 +89,11 @@ export default function HomeFilters(
       setDoubleBedsActive(false);
       setDoubleBeds('-');
     }
+    if (filter === 'contentSearch') {
+      setShowContentSearchFilter(false);
+      contentFilterHandler('');
+      newFilters[filter] = '';
+    }
     setFilters(newFilters);
     if (filter === 'type') {
       setType(newFilters[filter]);
@@ -108,7 +119,13 @@ export default function HomeFilters(
       fourStarsOnly,
       categories,
       maxPrice,
+      contentSearch: contentSearchView,
     };
+    if (contentSearchView) {
+      setShowContentSearchFilter(true);
+    } else {
+      setShowContentSearchFilter(false);
+    }
     setFilters(newFilters);
     sendFilters(newFilters);
   };
@@ -159,9 +176,8 @@ export default function HomeFilters(
     }
   };
 
-  const contentFilterHandler = (text) => {
-    setContentSearchView(text);
-    setContentSearch(text);
+  const removeContentSearchFilter = () => {
+    removeFilter('contentSearch');
   };
 
   const headerNavbarView = (
@@ -178,6 +194,18 @@ export default function HomeFilters(
         showsHorizontalScrollIndicator={false}
         style={styles.appliedFilters}
       >
+        {
+            showContentSearchFilter && (
+              <View style={styles.appliedFilter} key="filter-singlebeds">
+                <HomeFilterToast
+                  name={`${contentSearchView}`}
+                  icon="search"
+                  type="primary"
+                  onClose={() => removeContentSearchFilter()}
+                />
+              </View>
+            )
+          }
         {
             Object.keys(filters).map((filter) => {
               if (filter === 'singleBeds') return null;
