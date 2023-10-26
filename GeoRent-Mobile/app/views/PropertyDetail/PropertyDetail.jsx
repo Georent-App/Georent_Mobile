@@ -238,35 +238,35 @@ export function PropertyDetail() {
                   <Text style={styles.footerText}>{postInfo.contact_name}</Text>
                 </View>
                 <View style={styles.footerItem}>
-                  <Icon name="map-marker" size={20} color="#696969" />
+                  <Icon name="map-marker" size={20} color="red" />
                   <TouchableWithoutFeedback onPress={
                     () => abrirMapa(postInfo.latitude, postInfo.longitude, location)
                   }
                   >
-                    <Text style={styles.footerText}>
+                    <Text style={styles.hiprelinkText}>
                       {getPostAddressPlusDpto(postInfo)}
                     </Text>
                   </TouchableWithoutFeedback>
                 </View>
                 <View style={styles.footerItem}>
-                  <Icon name="phone" size={20} color="#696969" />
+                  <Icon name="phone" size={20} color="black" />
                   <TouchableWithoutFeedback onPress={() => hacerLlamada(postInfo.phone_number)}>
-                    <Text style={styles.footerText}>{postInfo.phone_number}</Text>
+                    <Text style={styles.hiprelinkText}>{postInfo.phone_number}</Text>
                   </TouchableWithoutFeedback>
                 </View>
                 <View
                   style={styles.footerItem}
                   onTouchEnd={() => abrirWhatsApp(postInfo.phone_number)}
                 >
-                  <Icon name="whatsapp" size={20} color="#696969" />
+                  <Icon name="whatsapp" size={20} color="green" />
                   <TouchableWithoutFeedback>
-                    <Text style={styles.footerText}>{postInfo.phone_number}</Text>
+                    <Text style={styles.hiprelinkText}>{postInfo.phone_number}</Text>
                   </TouchableWithoutFeedback>
                 </View>
                 <View style={styles.footerItem} onTouchEnd={() => abrirEmail(postInfo.email)}>
-                  <Icon name="envelope" size={20} color="#696969" />
+                  <Icon name="envelope" size={20} color="blue" />
                   <TouchableWithoutFeedback>
-                    <Text style={styles.footerText}>{postInfo.email}</Text>
+                    <Text style={styles.hiprelinkText}>{postInfo.email}</Text>
                   </TouchableWithoutFeedback>
                 </View>
                 { postInfo.web_site

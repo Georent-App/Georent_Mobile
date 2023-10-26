@@ -55,7 +55,6 @@ export function Home() {
     doubleBeds: '-',
     maxPrice: '-1',
   });
-  const [contentSearch, setContentSearch] = useState('');
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [postMaxPrice, setPostMaxPrice] = useState(0);
@@ -85,9 +84,6 @@ export function Home() {
         radius,
         newFilters,
       );
-      if (newFilters.contentSearch === '') {
-        setContentSearch('');
-      }
       const postFilteredByContent = searchPostByContent(response, newFilters.contentSearch);
       setPosts(postFilteredByContent);
     } catch (error) {
@@ -244,9 +240,6 @@ export function Home() {
 
   const onFiltersSubmit = async (newFilters) => {
     setFiltersLoading(true);
-    if (newFilters.contentSearch === '') {
-      setContentSearch('');
-    }
     await fetchNearPosts(currentRegion, newFilters);
     setFilters(newFilters);
     setFiltersLoading(false);
@@ -287,7 +280,6 @@ export function Home() {
         setFilters={setFilters}
         onSubmit={onFiltersSubmit}
         postMaxPrice={postMaxPrice}
-        setContentSearch={setContentSearch}
       />
       <View style={styles.mapContainer}>
         <MapView

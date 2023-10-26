@@ -28,7 +28,7 @@ const deviceWidth = Dimensions.get('window').width;
 export default function HomeFilters(
   {
     isActive, setIsActive, onSubmit, filtersLoading,
-    filters, setFilters, postMaxPrice, setContentSearch,
+    filters, setFilters, postMaxPrice,
   },
 ) {
   const [animation] = useState(
@@ -53,6 +53,7 @@ export default function HomeFilters(
   const [sliderValue, setSliderValue] = useState(0);
   const [sliderMaxValue, setSliderMaxValue] = useState(0);
   const [contentSearchView, setContentSearchView] = useState('');
+  const [contentSearchFilter, setContentSearchFilter] = useState('');
   const [showContentSearchFilter, setShowContentSearchFilter] = useState(false);
 
   const sendFilters = (newFilters) => {
@@ -61,7 +62,6 @@ export default function HomeFilters(
 
   const contentFilterHandler = (text) => {
     setContentSearchView(text);
-    setContentSearch(text);
   };
 
   const removeFilter = (filter, element = null) => {
@@ -111,6 +111,7 @@ export default function HomeFilters(
   };
 
   const preSubmit = () => {
+    setContentSearchFilter(contentSearchView);
     const newFilters = {
       type,
       singleBeds,
@@ -119,7 +120,7 @@ export default function HomeFilters(
       fourStarsOnly,
       categories,
       maxPrice,
-      contentSearch: contentSearchView,
+      contentSearch: contentSearchFilter,
     };
     if (contentSearchView) {
       setShowContentSearchFilter(true);
@@ -198,7 +199,7 @@ export default function HomeFilters(
             showContentSearchFilter && (
               <View style={styles.appliedFilter} key="filter-singlebeds">
                 <HomeFilterToast
-                  name={`${contentSearchView}`}
+                  name={`${contentSearchFilter}`}
                   icon="search"
                   type="primary"
                   onClose={() => removeContentSearchFilter()}
@@ -808,5 +809,4 @@ HomeFilters.propTypes = {
   }).isRequired,
   setFilters: PropTypes.func.isRequired,
   postMaxPrice: PropTypes.number.isRequired,
-  setContentSearch: PropTypes.func.isRequired,
 };
