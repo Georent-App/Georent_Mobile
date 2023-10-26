@@ -88,7 +88,12 @@ export const styles = StyleSheet.create({
   },
   footerText: {
     marginLeft: 10,
-    color: '#888',
+    color: 'black',
+  },
+  hiprelinkText: {
+    marginLeft: 10,
+    color: 'blue',
+    textDecorationLine: 'underline',
   },
   scrollViewContent: {
     flexGrow: 1,

@@ -15,8 +15,8 @@ const awsmobile = {
           "phone",
           "profile"
       ],
-      "redirectSignIn": "exp://192.168.100.34:19000",
-      "redirectSignOut": "exp://192.168.100.34:19000",
+      "redirectSignIn": "georent://",
+      "redirectSignOut": "georent://",
       "responseType": "code"
   },
   "federationTarget": "COGNITO_USER_POOLS",

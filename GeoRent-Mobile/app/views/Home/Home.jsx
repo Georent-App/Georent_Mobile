@@ -14,10 +14,10 @@ import { MapMarker } from '../../components/mapMarker/MapMarker';
 import ClusterMarker from '../../components/clusterMarker/ClusterMarker';
 import HomeFilters from '../../components/homeFilters/HomeFilters';
 import { Toast } from '../../components/Toast/Toast';
-
 import { calculateRadius } from '../../helpers/MapUtils';
 import { useLocation } from '../../context/LocationContext';
 import MapSearch from '../../components/mapSearch/MapSearch';
+import searchPostByContent from '../../helpers/searchPostByContent';
 
 const getRadius = (region) => {
   if (!region.latitudeDelta || !region.longitudeDelta) {
@@ -84,7 +84,8 @@ export function Home() {
         radius,
         newFilters,
       );
-      setPosts(response);
+      const postFilteredByContent = searchPostByContent(response, newFilters.contentSearch);
+      setPosts(postFilteredByContent);
     } catch (error) {
       setIsError(true);
       setErrorMessage('Error interno del servidor');

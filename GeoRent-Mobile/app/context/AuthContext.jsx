@@ -1,10 +1,12 @@
-import React, { createContext, useContext, useEffect, useState, useMemo } from 'react';
+import React, {
+  createContext, useContext, useEffect, useState, useMemo,
+} from 'react';
 import { Amplify, Auth } from 'aws-amplify';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { saveValue, getValue, deleteValue } from '../helpers/StorageManager';
 import { API_URL } from '../constants';
-import awsmobile from '../../aws-exports';
+import awsmobile from '../../awss-exports';
 
 const TOKEN_KEY = 'my-jwt';
 const AuthContext = createContext();
@@ -121,7 +123,7 @@ export function AuthProvider({ children }) {
       authState,
       RefreshUser,
     }),
-    [authState]
+    [authState],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

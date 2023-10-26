@@ -137,10 +137,16 @@ MapPostPreview.propTypes = {
     price: PropTypes.number.isRequired,
     address: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
-    images: PropTypes.arrayOf(PropTypes.shape({
-      url: PropTypes.string.isRequired,
-      id: PropTypes.number.isRequired,
-    })),
+    images: PropTypes.oneOfType([
+      PropTypes.shape({
+        id: PropTypes.number,
+        url: PropTypes.string,
+      }),
+      PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number,
+        url: PropTypes.string,
+      })),
+    ]),
   }),
   isOpen: PropTypes.bool.isRequired,
   setIsOpen: PropTypes.func.isRequired,
