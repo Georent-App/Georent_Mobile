@@ -14,6 +14,9 @@ export function MapMarker({ post, onMarkerPress }) {
     onMarkerPress(post);
   };
 
+  if (!post) {
+    return null;
+  }
   return (
     <Marker
       coordinate={{
