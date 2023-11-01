@@ -28,7 +28,8 @@ const deviceWidth = Dimensions.get('window').width;
 export default function HomeFilters(
   {
     isActive, setIsActive, onSubmit, filtersLoading,
-    filters, setFilters, postMaxPrice,
+    filters, setFilters, postMaxPrice, showPricesOnMap,
+    setShowPricesOnMap,
   },
 ) {
   const [animation] = useState(
@@ -537,6 +538,23 @@ export default function HomeFilters(
                   onSlidingComplete={handleSliderComplete}
                 />
               </View>
+              <View style={styles.capacityContainer}>
+                <CheckBox
+                  title="Visualizar precios en mapa"
+                  checked={showPricesOnMap}
+                  onPress={() => {
+                    setShowPricesOnMap(!showPricesOnMap);
+                  }}
+                  checkedColor="#2573DA"
+                  containerStyle={{
+                    backgroundColor: 'transparent',
+                    borderColor: 'transparent',
+                    margin: 0,
+                    padding: 5,
+                  }}
+                  textStyle={{ fontWeight: 'normal' }}
+                />
+              </View>
 
             </View>
           </Collapsible>
@@ -809,4 +827,6 @@ HomeFilters.propTypes = {
   }).isRequired,
   setFilters: PropTypes.func.isRequired,
   postMaxPrice: PropTypes.number.isRequired,
+  showPricesOnMap: PropTypes.bool.isRequired,
+  setShowPricesOnMap: PropTypes.func.isRequired,
 };

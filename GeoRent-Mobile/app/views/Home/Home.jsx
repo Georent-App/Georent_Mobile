@@ -64,6 +64,7 @@ export function Home() {
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [postMaxPrice, setPostMaxPrice] = useState(0);
+  const [showPricesOnMap, setShowPricesOnMap] = useState(false);
 
   const {
     location, errorMsg, locationPermissionGranted, locationLoading,
@@ -212,7 +213,6 @@ export function Home() {
       //  },
       // }));
       setClusters(newClusters);
-      console.log(newClusters);
     }
   }, [posts, location]);
 
@@ -360,6 +360,8 @@ export function Home() {
         setFilters={setFilters}
         onSubmit={onFiltersSubmit}
         postMaxPrice={postMaxPrice}
+        showPricesOnMap={showPricesOnMap}
+        setShowPricesOnMap={setShowPricesOnMap}
       />
       <View style={styles.mapContainer}>
         <MapView
@@ -403,7 +405,12 @@ export function Home() {
             }
             const { post } = item.properties;
             return (
-              <MapMarker post={post} onMarkerPress={onMarkerPress} key={index} />
+              <MapMarker
+                post={post}
+                onMarkerPress={onMarkerPress}
+                key={index}
+                showPricesOnMap={showPricesOnMap}
+              />
             );
           })}
         </MapView>

@@ -48,8 +48,10 @@ const MapMultiplePostsReview = forwardRef(({ posts, isOpen, setIsOpen }, ref) =>
       duration={200}
     >
       <ScrollView
+        vertical
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
       >
         {posts.map((post) => (
           <MapPostPreviewScrolleable
