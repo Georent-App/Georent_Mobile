@@ -1,3 +1,4 @@
+/* eslint-disable react/function-component-definition */
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -8,6 +9,7 @@ import ProfileStack from '../../router/ProfileStack';
 import { Home } from '../../views';
 import { styles } from './Navbar.styles';
 import { useAuth } from '../../context/AuthContext';
+import { abrirPaginaWeb } from '../../helpers/RedirectContact';
 
 const Tab = createBottomTabNavigator();
 
@@ -20,6 +22,8 @@ function getTabBarIcon(route, focused, color) {
     iconName = focused ? 'ios-location' : 'ios-location-outline';
   } else if (route.name === 'Perfil' || route.name === 'Iniciar Sesion') {
     iconName = focused ? 'ios-person-circle' : 'ios-person-circle-outline';
+  } else if (route.name === 'Publicar') {
+    iconName = focused ? 'ios-add-circle' : 'ios-add-circle-outline';
   }
 
   return <Ionicons name={iconName} size={28} color={color} style={{ marginTop: 5 }} />;
@@ -27,6 +31,8 @@ function getTabBarIcon(route, focused, color) {
 
 export function NavBar() {
   const { authState } = useAuth();
+
+  const EmptyComponent = () => null;
 
   const content = (
     <Tab.Navigator
@@ -43,6 +49,17 @@ export function NavBar() {
         style={styles.iconStyle}
         name="Cerca mío"
         component={PropertiesStack}
+      />
+      <Tab.Screen
+        style={styles.iconStyle}
+        name="Publicar"
+        component={EmptyComponent}
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault();
+            abrirPaginaWeb('https://georent.cl/georent_html/Publicar.html');
+          },
+        }}
       />
       <Tab.Screen
         style={styles.iconStyle}
