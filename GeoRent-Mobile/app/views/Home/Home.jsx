@@ -390,6 +390,7 @@ export function Home() {
                   posts={sameAddressPosts}
                   onSameAddressMarkerPress={onSameAddressMarkerPress}
                   key={index}
+                  showPricesOnMap={showPricesOnMap}
                 />
               );
             }

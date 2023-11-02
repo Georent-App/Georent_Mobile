@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import { Image, View, Text } from 'react-native';
 import { Marker } from 'react-native-maps';
@@ -8,8 +9,9 @@ import foodPin from '../../../assets/Food-pin-100px.png';
 import tradesAndServicesPin from '../../../assets/TradesAndServices-pin-100px.png';
 import businessPin from '../../../assets/Business-pin-100px.png';
 import entertainmentPin from '../../../assets/Entertainment-pin-100px.png';
+import { addPointsToNumber } from '../../helpers/numberFormatter';
 
-export default function SameAddressMapMarker({ posts, onSameAddressMarkerPress }) {
+export default function SameAddressMapMarker({ posts, onSameAddressMarkerPress, showPricesOnMap }) {
   const handlePress = () => {
     onSameAddressMarkerPress(posts);
   };
@@ -17,6 +19,34 @@ export default function SameAddressMapMarker({ posts, onSameAddressMarkerPress }
   if (!posts || posts.length === 0) {
     return null;
   }
+
+  const getMaxPriceFromPosts = () => {
+    let maxPrice = 0;
+    posts.forEach((post) => {
+      if (post.price > maxPrice) {
+        maxPrice = post.price;
+      }
+    });
+    return maxPrice;
+  };
+
+  const getMinPriceFromPosts = () => {
+    let minPrice = posts[0].price;
+    posts.forEach((post) => {
+      if (post.price < minPrice) {
+        minPrice = post.price;
+      }
+    });
+    return minPrice;
+  };
+
+  const getPriceRange = () => {
+    const maxPrice = getMaxPriceFromPosts();
+    const minPrice = getMinPriceFromPosts();
+    const maxPriceFormatted = addPointsToNumber(maxPrice);
+    const minPriceFormatted = addPointsToNumber(minPrice);
+    return `$${minPriceFormatted} - $${maxPriceFormatted}`;
+  };
 
   const representativePost = posts[0];
 
@@ -32,7 +62,17 @@ export default function SameAddressMapMarker({ posts, onSameAddressMarkerPress }
     >
       <View style={{ alignItems: 'center' }}>
         {representativePost.type === 'PROPERTY' && (
+        <View style={{ alignItems: 'center' }}>
+          { showPricesOnMap && (
+          <Text style={{
+            alignItems: 'center', justifyContent: 'center', fontSize: 16, fontWeight: '600',
+          }}
+          >
+            {getPriceRange()}
+          </Text>
+          )}
           <Image source={iconImage} style={{ width: 40, height: 40 }} resizeMode="contain" />
+        </View>
         )}
         {representativePost.type === 'CAMPING' && (
           <Image source={campingPin} style={{ width: 40, height: 40 }} resizeMode="contain" />
@@ -67,4 +107,5 @@ SameAddressMapMarker.propTypes = {
     }),
   ).isRequired,
   onSameAddressMarkerPress: PropTypes.func.isRequired,
+  showPricesOnMap: PropTypes.bool.isRequired,
 };
