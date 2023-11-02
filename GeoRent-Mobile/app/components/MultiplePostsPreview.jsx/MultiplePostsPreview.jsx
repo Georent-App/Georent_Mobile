@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useImperativeHandle, forwardRef } from 'react';
-import { ScrollView } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import { View, FlatList } from 'react-native';
 import PropTypes from 'prop-types';
 import * as Animatable from 'react-native-animatable';
 import MapPostPreviewScrolleable from './MapPostPreviewScrolleable';
@@ -39,29 +40,31 @@ const MapMultiplePostsReview = forwardRef(({ posts, isOpen, setIsOpen }, ref) =>
     handleClose,
   }));
 
+  const renderItem = ({ item }) => (
+    <MapPostPreviewScrolleable
+      post={item}
+      isOpen={isOpen}
+      setIsOpen={setIsOpen}
+    />
+  );
+
   return (
     <Animatable.View
       ref={(refs) => {
         scrolleablePostPreviewRef = refs;
       }}
-      animation={slideInLeft}
+      animation="slideInLeft"
       duration={200}
+      style={styles.animatableView}
     >
-      <ScrollView
-        vertical
-        style={styles.scroll}
-        contentContainerStyle={styles.scrollContent}
+      <FlatList
+        data={posts}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id.toString()}
         showsVerticalScrollIndicator={false}
-      >
-        {posts.map((post) => (
-          <MapPostPreviewScrolleable
-            key={post.id}
-            post={post}
-            isOpen={isOpen}
-            setIsOpen={setIsOpen}
-          />
-        ))}
-      </ScrollView>
+        nestedScrollEnabled
+        contentContainerStyle={styles.flatListContent}
+      />
     </Animatable.View>
   );
 });

@@ -1,11 +1,16 @@
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
-  scroll: {
-    width: '100%', height: 250, position: 'absolute', bottom: 10,
+  animatableView: {
+    position: 'absolute',
+    bottom: 10,
+    width: '100%',
+    height: 150,
   },
-  scrollContent: {
-    flexGrow: 1, alignItems: 'center', gap: 10,
+  flatListContent: {
+    flexGrow: 1,
+    alignItems: 'center',
+    gap: 10,
   },
   container: {
     alignItems: 'center',
