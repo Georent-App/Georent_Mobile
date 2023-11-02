@@ -1,20 +1,10 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useImperativeHandle, forwardRef } from 'react';
-import { ScrollView } from 'react-native-gesture-handler';
-import { View, FlatList } from 'react-native';
+import { FlatList } from 'react-native';
 import PropTypes from 'prop-types';
 import * as Animatable from 'react-native-animatable';
 import MapPostPreviewScrolleable from './MapPostPreviewScrolleable';
 import { styles } from './MultiplePostPreview.styles';
-
-const slideInLeft = {
-  from: {
-    translateX: -500,
-  },
-  to: {
-    translateX: 0,
-  },
-};
 
 const slideOutLeft = {
   from: {
