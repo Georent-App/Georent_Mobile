@@ -202,16 +202,6 @@ export function Home() {
         }
       });
 
-      // const newClusters = posts.map((post) => ({
-      //  properties: {
-      //    cluster: false,
-      //    point_count: 1,
-      //    post,
-      //  },
-      //  geometry: {
-      //    coordinates: [post.longitude, post.latitude],
-      //  },
-      // }));
       setClusters(newClusters);
     }
   }, [posts, location]);

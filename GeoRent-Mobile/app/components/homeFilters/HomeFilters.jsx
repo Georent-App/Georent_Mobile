@@ -111,8 +111,11 @@ export default function HomeFilters(
     sendFilters(newFilters);
   };
 
-  const preSubmit = () => {
+  useEffect(() => {
     setContentSearchFilter(contentSearchView);
+  }, [contentSearchView]);
+
+  const preSubmit = () => {
     const newFilters = {
       type,
       singleBeds,
@@ -395,6 +398,7 @@ export default function HomeFilters(
               padding: 5,
             }}
             textStyle={{ fontWeight: 'normal' }}
+            titleProps={{ style: { color: 'black', paddingLeft: 5 } }}
           />
           <Collapsible collapsed={!type.includes('PROPERTY')}>
             <View style={styles.capacityContainer}>
@@ -553,6 +557,7 @@ export default function HomeFilters(
                     padding: 5,
                   }}
                   textStyle={{ fontWeight: 'normal' }}
+                  titleProps={{ style: { color: 'black', paddingLeft: 5 } }}
                 />
               </View>
 
@@ -576,7 +581,7 @@ export default function HomeFilters(
                 margin: 0,
                 padding: 5,
               }}
-              titleProps={{ style: { paddingLeft: 10, width: 100 } }}
+              titleProps={{ style: { paddingLeft: 5, width: 100, color: 'black' } }}
               textStyle={{ fontWeight: 'normal' }}
             />
             <Image
@@ -607,6 +612,7 @@ export default function HomeFilters(
               padding: 5,
             }}
             textStyle={{ fontWeight: 'normal' }}
+            titleProps={{ style: { color: 'black', paddingLeft: 5 } }}
           />
           <Collapsible collapsed={
                       !type.includes('SERVICE')
@@ -742,6 +748,7 @@ export default function HomeFilters(
               padding: 5,
             }}
             textStyle={{ fontWeight: 'normal' }}
+            titleProps={{ style: { color: 'black', paddingLeft: 5 } }}
           />
         </View>
         <View>
@@ -760,6 +767,7 @@ export default function HomeFilters(
               padding: 5,
             }}
             textStyle={{ fontWeight: 'normal' }}
+            titleProps={{ style: { color: 'black', paddingLeft: 5 } }}
           />
         </View>
       </ScrollView>
