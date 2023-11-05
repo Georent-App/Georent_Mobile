@@ -512,7 +512,7 @@ export default function HomeFilters(
                   </TouchableOpacity>
                 </View>
               </View>
-              <View style={styles.capacityContainer}>
+              <View style={styles.maxPriceContainer}>
                 <Text>
                   {`Precio máximo: $${addPointsToNumber(sliderValue)}`}
                 </Text>
@@ -542,25 +542,44 @@ export default function HomeFilters(
                   onSlidingComplete={handleSliderComplete}
                 />
               </View>
-              <View style={styles.capacityContainer}>
-                <CheckBox
-                  title="Visualizar precios en mapa"
-                  checked={showPricesOnMap}
-                  onPress={() => {
-                    setShowPricesOnMap(!showPricesOnMap);
-                  }}
-                  checkedColor="#2573DA"
-                  containerStyle={{
-                    backgroundColor: 'transparent',
-                    borderColor: 'transparent',
-                    margin: 0,
-                    padding: 5,
-                  }}
-                  textStyle={{ fontWeight: 'normal' }}
-                  titleProps={{ style: { color: 'black', paddingLeft: 5 } }}
-                />
-              </View>
-
+            </View>
+            <View style={styles.checkboxContainer}>
+              <CheckBox
+                title="Visualizar precios en mapa"
+                checked={showPricesOnMap}
+                onPress={() => {
+                  setShowPricesOnMap(!showPricesOnMap);
+                }}
+                checkedColor="#2573DA"
+                containerStyle={{
+                  backgroundColor: 'transparent',
+                  borderColor: 'transparent',
+                  margin: 0,
+                  padding: 5,
+                }}
+                textStyle={{ fontWeight: 'normal' }}
+                titleProps={{ style: { color: 'black', paddingLeft: 5 } }}
+              />
+              <CheckBox
+                title="Disponible ahora"
+                checked={availability === 'available'}
+                onPress={() => {
+                  if (availability === 'available') {
+                    setAvailability('all');
+                  } else {
+                    setAvailability('available');
+                  }
+                }}
+                checkedColor="#2573DA"
+                containerStyle={{
+                  backgroundColor: 'transparent',
+                  borderColor: 'transparent',
+                  margin: 0,
+                  padding: 5,
+                }}
+                textStyle={{ fontWeight: 'normal' }}
+                titleProps={{ style: { color: 'black', paddingLeft: 5 } }}
+              />
             </View>
           </Collapsible>
           <View style={styles.category}>
@@ -725,31 +744,6 @@ export default function HomeFilters(
               </View>
             </View>
           </Collapsible>
-        </View>
-        <View>
-          <Text>
-            Disponibilidad:
-          </Text>
-          <CheckBox
-            title="Disponible ahora"
-            checked={availability === 'available'}
-            onPress={() => {
-              if (availability === 'available') {
-                setAvailability('all');
-              } else {
-                setAvailability('available');
-              }
-            }}
-            checkedColor="#2573DA"
-            containerStyle={{
-              backgroundColor: 'transparent',
-              borderColor: 'transparent',
-              margin: 0,
-              padding: 5,
-            }}
-            textStyle={{ fontWeight: 'normal' }}
-            titleProps={{ style: { color: 'black', paddingLeft: 5 } }}
-          />
         </View>
         <View>
           <Text>
