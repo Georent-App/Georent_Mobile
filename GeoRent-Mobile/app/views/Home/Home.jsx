@@ -23,6 +23,11 @@ import { useLocation } from '../../context/LocationContext';
 import MapSearch from '../../components/mapSearch/MapSearch';
 import searchPostByContent from '../../helpers/searchPostByContent';
 
+const defaultLocation = {
+  latitude: -33.4489, // Coordenadas de Santiago, Chile
+  longitude: -70.6693,
+};
+
 const getRadius = (region) => {
   if (!region.latitudeDelta || !region.longitudeDelta) {
     return 1000;
@@ -65,6 +70,10 @@ export function Home() {
   const [errorMessage, setErrorMessage] = useState('');
   const [postMaxPrice, setPostMaxPrice] = useState(0);
   const [showPricesOnMap, setShowPricesOnMap] = useState(false);
+  const [latitudeDeltaValue, setLatitudeDeltaValue] = useState(40);
+  const [longitudeDeltaValue, setLongitudeDeltaValue] = useState(40);
+  const [latitudeValue, setLatitudeValue] = useState(defaultLocation.latitude);
+  const [longitudeValue, setLongitudeValue] = useState(defaultLocation.longitude);
 
   const {
     location, errorMsg, locationPermissionGranted, locationLoading,
@@ -72,7 +81,7 @@ export function Home() {
 
   const mapNearPosts = useMapNearPosts();
   const postPreviewRef = useRef();
-  const mapRef = useRef();
+  const mapRef = useRef(null);
   const mapSearchRef = useRef();
   const scrolleablePostPreviewRef = useRef();
 
@@ -315,6 +324,27 @@ export function Home() {
     setFiltersLoading(false);
   };
 
+  useEffect(() => {
+    console.log('location', location);
+
+    if (location) {
+      setLatitudeDeltaValue(0.01);
+      setLongitudeDeltaValue(0.01);
+      setLatitudeValue(location.latitude);
+      setLongitudeValue(location.longitude);
+    }
+  }, [location]);
+
+  useEffect(() => {
+    if (!mapRef.current) return;
+    mapRef.current.animateToRegion({
+      latitude: latitudeValue,
+      longitude: longitudeValue,
+      latitudeDelta: latitudeDeltaValue,
+      longitudeDelta: longitudeDeltaValue,
+    }, 1000);
+  }, [latitudeValue || longitudeValue || latitudeDeltaValue || longitudeDeltaValue]);
+
   if (locationLoading) {
     return (
       <>
@@ -359,11 +389,11 @@ export function Home() {
           provider="google"
           style={styles.map}
           customMapStyle={mapStyle}
-          region={location && {
-            latitude: location.latitude,
-            longitude: location.longitude,
-            latitudeDelta: 0.01,
-            longitudeDelta: 0.01,
+          region={{
+            latitude: latitudeValue,
+            longitude: longitudeValue,
+            latitudeDelta: latitudeDeltaValue,
+            longitudeDelta: longitudeDeltaValue,
           }}
           onPress={onMapPress}
           onRegionChangeComplete={(newRegion) => {
