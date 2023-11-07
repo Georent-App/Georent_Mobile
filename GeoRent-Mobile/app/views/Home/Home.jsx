@@ -223,6 +223,7 @@ export function Home() {
   const onSameAddressMarkerPress = (postsList) => {
     setSelectedSameAddressPosts(postsList);
     setScrollPostsPreviewOpen(true);
+    setPostPreviewOpen(false);
     const samplePost = postsList[0];
     if (mapRef.current) {
       mapRef.current.animateToRegion({
@@ -242,6 +243,7 @@ export function Home() {
   const onMarkerPress = (post) => {
     setSelectedPost(post);
     setPostPreviewOpen(true);
+    setScrollPostsPreviewOpen(false);
     if (mapRef.current) {
       mapRef.current.animateToRegion({
         latitude: post.latitude,
