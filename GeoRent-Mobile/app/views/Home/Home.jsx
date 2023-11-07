@@ -74,7 +74,6 @@ export function Home() {
   const [longitudeDeltaValue, setLongitudeDeltaValue] = useState(40);
   const [latitudeValue, setLatitudeValue] = useState(defaultLocation.latitude);
   const [longitudeValue, setLongitudeValue] = useState(defaultLocation.longitude);
-  const [markerPressed, setMarkerPressed] = useState(false);
   const {
     location, errorMsg, locationPermissionGranted, locationLoading,
   } = useLocation();
@@ -241,7 +240,6 @@ export function Home() {
   };
 
   const onMarkerPress = (post) => {
-    setMarkerPressed(true);
     setSelectedPost(post);
     setPostPreviewOpen(true);
     setScrollPostsPreviewOpen(false);
@@ -307,10 +305,9 @@ export function Home() {
   };
 
   const onMapPress = () => {
-    if (postPreviewOpen && !markerPressed) {
+    if (postPreviewOpen) {
       setPostPreviewOpen(false);
       postPreviewRef.current.handleClose();
-      setMarkerPressed(false);
     }
     if (scrollPostsPreviewOpen) {
       setScrollPostsPreviewOpen(false);
