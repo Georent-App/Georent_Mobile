@@ -225,7 +225,6 @@ export function PropertiesIndex() {
           scrollEventThrottle={16}
           onTouchEnd={() => setFiltersOpen(false)}
         >
-
           <View style={styles.header}>
             <Text style={styles.title}> Cerca de ti </Text>
             <View style={styles.row}>

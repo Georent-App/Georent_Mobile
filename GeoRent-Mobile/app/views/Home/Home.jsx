@@ -331,8 +331,6 @@ export function Home() {
   };
 
   useEffect(() => {
-    console.log('location', location);
-
     if (location) {
       setLatitudeDeltaValue(0.01);
       setLongitudeDeltaValue(0.01);

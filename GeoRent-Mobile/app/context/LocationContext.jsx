@@ -55,6 +55,7 @@ export function LocationProvider({ children }) {
       setLocationPermissionGranted(true);
     } catch (error) {
       setErrorMsg(error.message);
+      setLocationLoading(false);
     } finally {
       setLocationLoading(false);
     }
