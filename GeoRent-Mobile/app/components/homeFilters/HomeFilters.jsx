@@ -28,7 +28,8 @@ const deviceWidth = Dimensions.get('window').width;
 export default function HomeFilters(
   {
     isActive, setIsActive, onSubmit, filtersLoading,
-    filters, setFilters, postMaxPrice,
+    filters, setFilters, postMaxPrice, showPricesOnMap,
+    setShowPricesOnMap,
   },
 ) {
   const [animation] = useState(
@@ -110,8 +111,11 @@ export default function HomeFilters(
     sendFilters(newFilters);
   };
 
-  const preSubmit = () => {
+  useEffect(() => {
     setContentSearchFilter(contentSearchView);
+  }, [contentSearchView]);
+
+  const preSubmit = () => {
     const newFilters = {
       type,
       singleBeds,
@@ -394,6 +398,7 @@ export default function HomeFilters(
               padding: 5,
             }}
             textStyle={{ fontWeight: 'normal' }}
+            titleProps={{ style: { color: 'black', paddingLeft: 5 } }}
           />
           <Collapsible collapsed={!type.includes('PROPERTY')}>
             <View style={styles.capacityContainer}>
@@ -507,7 +512,7 @@ export default function HomeFilters(
                   </TouchableOpacity>
                 </View>
               </View>
-              <View style={styles.capacityContainer}>
+              <View style={styles.maxPriceContainer}>
                 <Text>
                   {`Precio máximo: $${addPointsToNumber(sliderValue)}`}
                 </Text>
@@ -537,7 +542,44 @@ export default function HomeFilters(
                   onSlidingComplete={handleSliderComplete}
                 />
               </View>
-
+            </View>
+            <View style={styles.checkboxContainer}>
+              <CheckBox
+                title="Visualizar precios en mapa"
+                checked={showPricesOnMap}
+                onPress={() => {
+                  setShowPricesOnMap(!showPricesOnMap);
+                }}
+                checkedColor="#2573DA"
+                containerStyle={{
+                  backgroundColor: 'transparent',
+                  borderColor: 'transparent',
+                  margin: 0,
+                  padding: 5,
+                }}
+                textStyle={{ fontWeight: 'normal' }}
+                titleProps={{ style: { color: 'black', paddingLeft: 5 } }}
+              />
+              <CheckBox
+                title="Disponible ahora"
+                checked={availability === 'available'}
+                onPress={() => {
+                  if (availability === 'available') {
+                    setAvailability('all');
+                  } else {
+                    setAvailability('available');
+                  }
+                }}
+                checkedColor="#2573DA"
+                containerStyle={{
+                  backgroundColor: 'transparent',
+                  borderColor: 'transparent',
+                  margin: 0,
+                  padding: 5,
+                }}
+                textStyle={{ fontWeight: 'normal' }}
+                titleProps={{ style: { color: 'black', paddingLeft: 5 } }}
+              />
             </View>
           </Collapsible>
           <View style={styles.category}>
@@ -558,7 +600,7 @@ export default function HomeFilters(
                 margin: 0,
                 padding: 5,
               }}
-              titleProps={{ style: { paddingLeft: 10, width: 100 } }}
+              titleProps={{ style: { paddingLeft: 5, width: 100, color: 'black' } }}
               textStyle={{ fontWeight: 'normal' }}
             />
             <Image
@@ -589,6 +631,7 @@ export default function HomeFilters(
               padding: 5,
             }}
             textStyle={{ fontWeight: 'normal' }}
+            titleProps={{ style: { color: 'black', paddingLeft: 5 } }}
           />
           <Collapsible collapsed={
                       !type.includes('SERVICE')
@@ -704,30 +747,6 @@ export default function HomeFilters(
         </View>
         <View>
           <Text>
-            Disponibilidad:
-          </Text>
-          <CheckBox
-            title="Disponible ahora"
-            checked={availability === 'available'}
-            onPress={() => {
-              if (availability === 'available') {
-                setAvailability('all');
-              } else {
-                setAvailability('available');
-              }
-            }}
-            checkedColor="#2573DA"
-            containerStyle={{
-              backgroundColor: 'transparent',
-              borderColor: 'transparent',
-              margin: 0,
-              padding: 5,
-            }}
-            textStyle={{ fontWeight: 'normal' }}
-          />
-        </View>
-        <View>
-          <Text>
             Calificación mínima:
           </Text>
           <CheckBox
@@ -742,6 +761,7 @@ export default function HomeFilters(
               padding: 5,
             }}
             textStyle={{ fontWeight: 'normal' }}
+            titleProps={{ style: { color: 'black', paddingLeft: 5 } }}
           />
         </View>
       </ScrollView>
@@ -809,4 +829,6 @@ HomeFilters.propTypes = {
   }).isRequired,
   setFilters: PropTypes.func.isRequired,
   postMaxPrice: PropTypes.number.isRequired,
+  showPricesOnMap: PropTypes.bool.isRequired,
+  setShowPricesOnMap: PropTypes.func.isRequired,
 };

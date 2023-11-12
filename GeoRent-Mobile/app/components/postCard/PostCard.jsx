@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, Image } from 'react-native';
+import {
+  View, Text, Image, TouchableOpacity,
+} from 'react-native';
 import { styles } from './PostCard.styles';
 import { addPointsToNumber } from '../../helpers/numberFormatter';
 import { API_URL } from '../../constants';
@@ -16,7 +18,7 @@ import tradesAndServicesIcon from '../../../assets/TradesAndServices-icon.png';
 export function PostCard({ post }) {
   const navigation = useNavigation();
 
-  const handleTouch = () => {
+  const handlePress = () => {
     navigation.navigate('PropertyDetail', { post });
   };
 
@@ -30,16 +32,15 @@ export function PostCard({ post }) {
   };
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={handlePress}>
       <View
         style={styles.shadow}
-        onTouchEnd={handleTouch}
       >
         {post.type === 'CAMPING' && (
-          <Image
-            source={CampingIcon}
-            style={styles.typeIcon}
-          />
+        <Image
+          source={CampingIcon}
+          style={styles.typeIcon}
+        />
         )}
         {post.type === 'SERVICE' && (() => {
           if (post.category === 'FOOD') {
@@ -102,7 +103,7 @@ export function PostCard({ post }) {
           </Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 

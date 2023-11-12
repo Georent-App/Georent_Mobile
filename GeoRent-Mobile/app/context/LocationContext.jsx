@@ -9,9 +9,25 @@ const LocationContext = createContext();
 
 export function LocationProvider({ children }) {
   const [location, setLocation] = useState(null);
+  const [isCurrentLocation, setIsCurrentLocation] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
   const [locationPermissionGranted, setLocationPermissionGranted] = useState(false);
   const [locationLoading, setLocationLoading] = useState(true);
+
+  const defaultLocation = {
+    latitude: -33.4489, // Coordenadas de Santiago, Chile
+    longitude: -70.6693,
+  };
+
+  async function getCurrentLocation() {
+    try {
+      const currentLocation = await Location.getCurrentPositionAsync({});
+      setLocation(currentLocation.coords);
+      setIsCurrentLocation(true);
+    } catch (error) {
+      setErrorMsg(`Background location update failed: ${error.message}`);
+    }
+  }
 
   const getInitLocation = async () => {
     try {
@@ -23,19 +39,31 @@ export function LocationProvider({ children }) {
         return;
       }
 
-      const currentLocation = await Location.getCurrentPositionAsync({});
-      setLocation(currentLocation.coords);
+      try {
+        const lastKnownLocation = await Location.getLastKnownPositionAsync();
+        if (lastKnownLocation) {
+          setLocation(lastKnownLocation.coords);
+        } else {
+          setLocation(defaultLocation);
+        }
+        setIsCurrentLocation(false);
+      } catch (error) {
+        setLocation(defaultLocation);
+        setIsCurrentLocation(false);
+      }
+
       setLocationPermissionGranted(true);
-      setLocationLoading(false);
     } catch (error) {
       setErrorMsg(error.message);
+      setLocationLoading(false);
+    } finally {
       setLocationLoading(false);
     }
   };
 
   async function updateLocation() {
     if (!locationPermissionGranted) {
-      await getInitLocation();
+      await getCurrentLocation();
       return;
     }
     try {
@@ -49,6 +77,13 @@ export function LocationProvider({ children }) {
       setLocationLoading(false);
     }
   }
+
+  useEffect(() => {
+    if (!isCurrentLocation && locationPermissionGranted) {
+      // Intenta actualizar la ubicación en segundo plano
+      getCurrentLocation();
+    }
+  }, [isCurrentLocation, locationPermissionGranted]);
 
   useEffect(() => {
     if (!locationPermissionGranted) {
