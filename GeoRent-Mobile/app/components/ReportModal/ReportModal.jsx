@@ -11,14 +11,14 @@ import {
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { useAuth0 } from 'react-native-auth0';
 import { API_URL } from '../../constants';
 import { styles } from './ReportModal.styles';
 import { ButtonGeoR } from '../ButtonGeoR/ButtonGeoR';
 import { Toast } from '../Toast/Toast';
-import { useAuth } from '../../context/AuthContext';
 
 export function ReportModal({ postId }) {
-  const { authState } = useAuth();
+  const { user } = useAuth0();
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [isError, setIsError] = useState(false);
@@ -30,7 +30,7 @@ export function ReportModal({ postId }) {
   };
 
   const handleReport = async () => {
-    if (!authState.authenticated) {
+    if (!user) {
       setToastMessage('Debes iniciar sesión para poder reprotar una propiedad.');
       setIsError(false);
       return setShowToast(true);

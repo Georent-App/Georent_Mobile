@@ -77,16 +77,19 @@ export const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 16,
+    color: 'white',
   },
   container: {
     flex: 1,
     backgroundColor: '#fff',
     paddingHorizontal: 20,
     paddingVertical: 30,
+    justifyContent: 'center',
   },
   section: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     marginVertical: 10,
   },
   label: {
