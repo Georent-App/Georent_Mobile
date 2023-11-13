@@ -49,9 +49,9 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: '2.08%',
+    paddingVertical: '2.38%',
     paddingHorizontal: '8.89%',
-    width: '75%',
+    width: '55%',
     backgroundColor: '#2573DA',
     shadowColor: '#000',
     shadowOffset: {
@@ -62,6 +62,7 @@ export const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
     borderRadius: 10,
+    marginTop: 50,
   },
   fieldContainer: {
     display: 'flex',
@@ -79,6 +80,15 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     color: 'white',
   },
+  profileContainer: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 30,
+    gap: 25,
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -87,17 +97,17 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   section: {
-    flexDirection: 'row',
+    flexDirection: 'col',
     alignItems: 'center',
     justifyContent: 'center',
     marginVertical: 10,
+    gap: 10,
   },
   label: {
     fontWeight: 'bold',
     color: '#0C2649',
-    marginRight: 10,
   },
   value: {
-    flex: 1,
+    justifyContent: 'center',
   },
 });

@@ -4,7 +4,6 @@ import {
   View, Text, TouchableOpacity,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useAuth0 } from 'react-native-auth0';
 import { Header } from '../../components/header/Header';
 import { styles } from './Profile.styles';
@@ -14,7 +13,6 @@ export function Profile() {
   const [sessionAvailable, setSessionAvailable] = useState(false);
   const [userName, setUserName] = useState('-');
   const [userEmail, setUserEmail] = useState('-');
-  const [userPhoneNumber, setUserPhoneNumber] = useState('-');
   const navigation = useNavigation();
 
   const handleLogout = async () => {
@@ -31,7 +29,7 @@ export function Profile() {
   };
 
   const ShowUserProfile = (
-    <View style={styles.container}>
+    <View style={styles.profileContainer}>
       <Text style={[styles.fieldContainer, styles.title]}>Perfil de Usuario</Text>
       <View style={styles.section}>
         <Text style={styles.label}>Nombre:</Text>
@@ -41,18 +39,9 @@ export function Profile() {
         <Text style={styles.label}>Correo Electrónico:</Text>
         <Text style={styles.value}>{userEmail}</Text>
       </View>
-      <View style={styles.section}>
-        <Text style={styles.label}>Numero de Contacto:</Text>
-        <Text style={styles.value}>{userPhoneNumber}</Text>
-      </View>
       <TouchableOpacity style={styles.button} onPress={handleLogout}>
         <Text style={styles.buttonText}>Cerrar sesión</Text>
       </TouchableOpacity>
-      <View style={styles.section}>
-        <Text style={styles.label}>Arriendos Anteriores</Text>
-        <Text style={styles.value}>Todavía no tienes arriendos</Text>
-        <Ionicons name="sad-outline" size={24} />
-      </View>
     </View>
   );
 
@@ -66,9 +55,21 @@ export function Profile() {
     </View>
   );
 
+  const getUserName = () => {
+    if (!user) return '-';
+    try {
+      if (user.given_name) return user.given_name;
+      if (user.name) return user.name;
+      if (user.nickname) return user.nickname;
+      return '-';
+    } catch (error) {
+      return '-';
+    }
+  };
+
   useEffect(() => {
     if (user) {
-      setUserName(user.name);
+      setUserName(getUserName());
       setUserEmail(user.email);
       setSessionAvailable(true);
     }
