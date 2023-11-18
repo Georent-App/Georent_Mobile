@@ -30,7 +30,6 @@ function getTabBarIcon(route, focused, color) {
 
 export function NavBar() {
   const { user } = useAuth0();
-
   const EmptyComponent = () => null;
 
   const content = (

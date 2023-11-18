@@ -18,7 +18,7 @@ import { ButtonGeoR } from '../ButtonGeoR/ButtonGeoR';
 import { Toast } from '../Toast/Toast';
 
 export function ReportModal({ postId }) {
-  const { user } = useAuth0();
+  const { user, getCredentials } = useAuth0();
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [isError, setIsError] = useState(false);
@@ -36,10 +36,17 @@ export function ReportModal({ postId }) {
       return setShowToast(true);
     }
     try {
+      const credentials = await getCredentials();
+      const { accessToken } = credentials;
       setIsButtonDisabled(true);
       await axios.post(`${API_URL}/reports/create`, {
         post: postId,
         comment: reportText,
+      }, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
       });
       setIsButtonDisabled(false);
       setToastMessage('¡Reporte enviado exitosamente!');

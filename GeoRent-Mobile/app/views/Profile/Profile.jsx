@@ -10,6 +10,7 @@ import { styles } from './Profile.styles';
 
 export function Profile() {
   const { user, authorize, clearSession } = useAuth0();
+
   const [sessionAvailable, setSessionAvailable] = useState(false);
   const [userName, setUserName] = useState('-');
   const [userEmail, setUserEmail] = useState('-');

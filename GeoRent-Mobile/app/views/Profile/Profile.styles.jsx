@@ -97,7 +97,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   section: {
-    flexDirection: 'col',
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
     marginVertical: 10,
