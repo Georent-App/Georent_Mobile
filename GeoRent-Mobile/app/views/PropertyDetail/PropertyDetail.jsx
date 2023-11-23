@@ -92,7 +92,7 @@ export function PropertyDetail() {
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <StatusBar translucent={false} style="dark" backgroundColor="white" />
-        <BackButton backRoute="PropertiesIndex" />
+        <BackButton />
         <LoadingScreen />
       </SafeAreaView>
     );
@@ -111,7 +111,7 @@ export function PropertyDetail() {
     <SafeAreaView style={{ flex: 1 }}>
       <StatusBar translucent={false} style="dark" backgroundColor="white" />
       <View style={(containerStyle, { height: scrollViewHeight })}>
-        <BackButton backRoute="PropertiesIndex" />
+        <BackButton />
         <ScrollView style={{ flex: 1 }}>
           <View style={styles.imageContainer}>
             {checkIfAreImages() ? (
