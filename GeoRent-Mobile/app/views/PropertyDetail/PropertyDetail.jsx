@@ -32,7 +32,6 @@ export function PropertyDetail() {
   const route = useRoute();
   const { post } = route.params;
   const scrollViewWidth = useWindowDimensions().width;
-  const scrollViewHeight = useWindowDimensions().height - 60;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [reservations, setReservations] = useState([]);
   const [showFullDescription, setShowFullDescription] = useState(false);
@@ -43,7 +42,6 @@ export function PropertyDetail() {
   const [phoneModalVisible, setPhoneModalVisible] = useState(false);
   const [emailModalVisible, setEmailModalVisible] = useState(false);
   const [whatsappModalVisible, setWhatsappModalVisible] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
 
   const { location } = useLocation();
 
@@ -65,13 +63,6 @@ export function PropertyDetail() {
     setLoading(true);
     fetchReservations();
   }, [post]);
-
-  const containerStyle = [
-    styles.container,
-    {
-      backgroundColor: '#000',
-    },
-  ];
 
   const handleScroll = (event) => {
     const contentOffsetX = event.nativeEvent.contentOffset.x;
@@ -110,7 +101,7 @@ export function PropertyDetail() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <StatusBar translucent={false} style="dark" backgroundColor="white" />
-      <View style={(containerStyle, { height: scrollViewHeight })}>
+      <View style={styles.container}>
         <BackButton />
         <ScrollView style={{ flex: 1 }}>
           <View style={styles.imageContainer}>
@@ -339,11 +330,6 @@ export function PropertyDetail() {
               <Card.Divider />
               <ReportModal postId={postInfo.id} />
               <Card.Divider />
-              <ActionWithWarningModal
-                message="Esta publicación ya no está disponible"
-                modalVisible={modalVisible}
-                setModalVisible={setModalVisible}
-              />
             </Card>
           </View>
         </ScrollView>

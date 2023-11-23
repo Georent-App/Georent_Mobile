@@ -26,6 +26,17 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     marginVertical: 10,
   },
+  reportButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    // Estilos del botón para abrir el modal
+  },
+  reportText: {
+    fontWeight: 'bold',
+    marginLeft: 5,
+    color: '#2573DA',
+    // Estilos del texto del botón para abrir el modal
+  },
   modalContainer: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -54,5 +65,39 @@ export const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: 'justify',
     opacity: 0.8,
+  },
+  sendButton: {
+    width: '100%',
+    backgroundColor: '#2573DA',
+    padding: 10,
+    marginTop: 15,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  sendButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  textInput: {
+    height: 120,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+    textAlignVertical: 'top',
+  },
+  ratingNumber: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: 'black',
+  },
+  starIcon: {
+    fontSize: 40,
+    color: 'gold',
+  },
+  slider: {
+    width: '100%',
+    alignSelf: 'flex-start', // Alineación a la izquierda
   },
 });
