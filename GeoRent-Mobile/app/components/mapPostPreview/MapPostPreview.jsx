@@ -43,7 +43,7 @@ const MapPostPreview = forwardRef(({ post, isOpen, setIsOpen }, ref) => {
   }));
 
   const onPress = () => {
-    navigation.navigate('Cerca mío', { screen: 'PropertyDetail', params: { post } });
+    navigation.navigate('Inicio', { screen: 'PropertyDetail', params: { post } });
   };
 
   const checkIfAreImages = () => {

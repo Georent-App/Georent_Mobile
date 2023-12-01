@@ -61,7 +61,7 @@ export function ActionWithWarningModal({
                   <Icon name={icon} style={styles.iconContainer} size={30} color={iconColor} />
                 </View>
                 <Text style={styles.modalTitle}>{message}</Text>
-                <ButtonGeoR message={buttonText} Action={buttonOnPress} />
+                <ButtonGeoR message={buttonText} Action={buttonOnPress} ButtonDisabled={false} />
               </View>
             </TouchableWithoutFeedback>
           </View>

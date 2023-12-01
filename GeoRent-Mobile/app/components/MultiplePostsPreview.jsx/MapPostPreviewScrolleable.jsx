@@ -43,7 +43,7 @@ const MapPostPreviewScrolleable = forwardRef(({ post, isOpen, setIsOpen }, ref) 
   }));
 
   const onPress = () => {
-    navigation.navigate('Cerca mío', { screen: 'PropertyDetail', params: { post } });
+    navigation.navigate('PropertyDetail', { post });
   };
 
   const checkIfAreImages = () => {

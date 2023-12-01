@@ -22,7 +22,7 @@ export const styles = StyleSheet.create({
   },
   reportContainer: {
     flex: 1,
-    alignItems: 'start',
+    alignItems: 'flex-start',
     justifyContent: 'center',
     marginVertical: 10,
   },

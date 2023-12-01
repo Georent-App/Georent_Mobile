@@ -8,7 +8,6 @@ export default function PropertiesStack() {
   return (
     <Stack.Navigator>
       <Stack.Screen name="PropertiesIndex" options={{ headerShown: false }} component={PropertiesIndex} />
-      <Stack.Screen name="PropertyDetail" options={{ headerShown: false }} component={PropertyDetail} />
     </Stack.Navigator>
   );
 }

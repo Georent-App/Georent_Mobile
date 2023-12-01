@@ -6,6 +6,7 @@ import { SafeAreaView, Platform, View } from 'react-native';
 import { useAuth0 } from 'react-native-auth0';
 import PropertiesStack from '../../router/PropertyStack';
 import ProfileStack from '../../router/ProfileStack';
+import HomeStack from '../../router/HomeStack';
 import { Home } from '../../views';
 import { styles } from './Navbar.styles';
 import { abrirPaginaWeb } from '../../helpers/RedirectContact';
@@ -42,7 +43,7 @@ export function NavBar() {
         tabBarLabelStyle: [{ display: 'flex', fontSize: 13, marginBottom: 8 }],
       })}
     >
-      <Tab.Screen style={styles.iconStyle} name="Inicio" component={Home} />
+      <Tab.Screen style={styles.iconStyle} name="Inicio" component={HomeStack} />
       <Tab.Screen
         style={styles.iconStyle}
         name="Cerca mío"
