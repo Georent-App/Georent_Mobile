@@ -1,6 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { PropertyDetail, PropertiesIndex } from '../views/index';
+import { PropertiesIndex } from '../views/index';
 
 const Stack = createStackNavigator();
 

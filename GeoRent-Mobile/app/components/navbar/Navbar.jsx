@@ -7,7 +7,6 @@ import { useAuth0 } from 'react-native-auth0';
 import PropertiesStack from '../../router/PropertyStack';
 import ProfileStack from '../../router/ProfileStack';
 import HomeStack from '../../router/HomeStack';
-import { Home } from '../../views';
 import { styles } from './Navbar.styles';
 import { abrirPaginaWeb } from '../../helpers/RedirectContact';
 
