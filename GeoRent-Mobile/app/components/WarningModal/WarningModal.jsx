@@ -43,7 +43,7 @@ export function ActionWithWarningModal({
   return (
     <View style={styles.reportContainer}>
       <TouchableOpacity onPress={toggleModal} style={styles.reportButton}>
-        <Icon name={icon} size={20} color={iconColor} />
+        <Icon name={icon} size={25} color={iconColor} />
         <Text style={styles.hiprelinkText}>{actionText}</Text>
       </TouchableOpacity>
       <Modal animationType="fade" transparent visible={modalVisible} onRequestClose={closeModal}>

@@ -43,6 +43,9 @@ export function Profile() {
       <TouchableOpacity style={styles.button} onPress={handleLogout}>
         <Text style={styles.buttonText}>Cerrar sesión</Text>
       </TouchableOpacity>
+      <View>
+        <Text style={styles.footer}>GeoRent 2021</Text>
+      </View>
     </View>
   );
 
@@ -77,7 +80,7 @@ export function Profile() {
   }, [user]);
 
   return (
-    sessionAvailable ? (
+    true ? (
       <View style={{ flex: 1 }}>
         <StatusBar translucent={false} style="dark" backgroundColor="white" />
         <Header />

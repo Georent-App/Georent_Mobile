@@ -149,7 +149,7 @@ export function PropertyDetail() {
                 <View style={styles.allRatingContainer}>
                   <View style={styles.ratingContainer}>
                     <View style={styles.ratingIconContainer}>
-                      <Icon name="star" size={20} color="gold" />
+                      <Icon name="star" size={25} color="gold" />
                     </View>
                     <Text style={styles.ratingValue}>{postInfo.rating_average.toFixed(1)}</Text>
                     <Text style={styles.ratingText}>estrellas de 5</Text>
@@ -231,7 +231,7 @@ export function PropertyDetail() {
               <Text style={styles.cardTitle}>Información de Contacto</Text>
               <View style={styles.propertyInfoContainer}>
                 <View style={styles.footerItem}>
-                  <Icon name="user" size={20} color="#696969" />
+                  <Icon name="user" size={25} color="#696969" />
                   <Text style={styles.footerText}>{postInfo.contact_name}</Text>
                 </View>
                 <View style={styles.footerItem}>
@@ -290,9 +290,9 @@ export function PropertyDetail() {
                     () => abrirPaginaWeb(postInfo.web_site)
                   }
                   >
-                    <Icon name="link" size={20} color="#696969" />
+                    <Icon name="link" size={25} color="#696969" />
                     <TouchableWithoutFeedback>
-                      <Text style={styles.footerText}>{postInfo.web_site}</Text>
+                      <Text style={styles.hiprelinkText}>{postInfo.web_site}</Text>
                     </TouchableWithoutFeedback>
                   </View>
                   )}
@@ -304,9 +304,9 @@ export function PropertyDetail() {
                     () => abrirPaginaWeb(postInfo.social_network_1)
                   }
                   >
-                    <Icon name="facebook" size={20} color="#696969" />
+                    <Icon name="facebook" size={25} color="#696969" />
                     <TouchableWithoutFeedback>
-                      <Text style={styles.footerText}>{postInfo.social_network_1}</Text>
+                      <Text style={styles.hiprelinkText}>{postInfo.social_network_1}</Text>
                     </TouchableWithoutFeedback>
                   </View>
                   )}
@@ -318,9 +318,9 @@ export function PropertyDetail() {
                     () => abrirPaginaWeb(postInfo.social_network_2)
                   }
                   >
-                    <Icon name="instagram" size={20} color="#696969" />
+                    <Icon name="instagram" size={25} color="#696969" />
                     <TouchableWithoutFeedback>
-                      <Text style={styles.footerText}>{postInfo.social_network_2}</Text>
+                      <Text style={styles.hiprelinkText}>{postInfo.social_network_2}</Text>
                     </TouchableWithoutFeedback>
                   </View>
                   )}
