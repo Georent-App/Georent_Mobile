@@ -24,6 +24,18 @@ export const abrirWhatsApp = (numeroTelefono) => {
     return null;
   });
 };
+
+export const enviarWhatsapp = (numeroTelefono, mensaje) => {
+  const numeroLimpio = limpiarNumero(numeroTelefono);
+  const url = `https://wa.me/${numeroLimpio}?text=${mensaje}`;
+  Linking.openURL(url).then((supported) => {
+    if (supported) {
+      return Linking.openURL(url);
+    }
+    return null;
+  });
+};
+
 export const abrirEmail = (email) => {
   const url = `mailto:${email}`;
   Linking.openURL(url);

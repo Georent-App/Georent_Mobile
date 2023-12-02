@@ -7,6 +7,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useAuth0 } from 'react-native-auth0';
 import { Header } from '../../components/header/Header';
 import { styles } from './Profile.styles';
+import { enviarWhatsapp } from '../../helpers/RedirectContact';
 
 export function Profile() {
   const { user, authorize, clearSession } = useAuth0();
@@ -14,6 +15,8 @@ export function Profile() {
   const [sessionAvailable, setSessionAvailable] = useState(false);
   const [userName, setUserName] = useState('-');
   const [userEmail, setUserEmail] = useState('-');
+  const [userId, setUserId] = useState('-');
+  const [userConnection, setUserConnection] = useState('-');
   const navigation = useNavigation();
 
   const handleLogout = async () => {
@@ -27,6 +30,14 @@ export function Profile() {
     } catch (e) {
       console.log(e);
     }
+  };
+
+  const sendMessageToWhatsApp = () => {
+    if (!user) return;
+    const phone = '+56992679247';
+    const message = 'Hola, quisiera eliminar mi información de Georent!';
+    const payload = `${message}\n\n- Nombre: ${userName}\n- Correo: ${userEmail}\n- Id: ${userId}\n- Conexión: ${userConnection}\n`;
+    enviarWhatsapp(phone, payload);
   };
 
   const ShowUserProfile = (
@@ -43,9 +54,6 @@ export function Profile() {
       <TouchableOpacity style={styles.button} onPress={handleLogout}>
         <Text style={styles.buttonText}>Cerrar sesión</Text>
       </TouchableOpacity>
-      <View>
-        <Text style={styles.footer}>GeoRent 2021</Text>
-      </View>
     </View>
   );
 
@@ -75,16 +83,23 @@ export function Profile() {
     if (user) {
       setUserName(getUserName());
       setUserEmail(user.email);
+      setUserId(user.identities[0].user_id);
+      setUserConnection(user.identities[0].connection);
       setSessionAvailable(true);
     }
   }, [user]);
 
   return (
-    true ? (
-      <View style={{ flex: 1 }}>
+    sessionAvailable ? (
+      <View style={{ flex: 1, justifyContent: 'space-between' }}>
         <StatusBar translucent={false} style="dark" backgroundColor="white" />
         <Header />
         {ShowUserProfile}
+        <View style={styles.hiperLinkContainer}>
+          <TouchableOpacity onPress={sendMessageToWhatsApp}>
+            <Text style={styles.deleteInfoHiperlink}>Solicitar eliminar información</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     ) : (
       <View style={{ flex: 1 }}>
