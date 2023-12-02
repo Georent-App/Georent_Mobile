@@ -33,7 +33,7 @@ export function Profile() {
   const sendMessageToWhatsApp = () => {
     if (!user) return;
     const phone = '+56992679247';
-    const message = 'Hola, quisiera eliminar mi información de Georent!';
+    const message = 'Hola, quisiera eliminar mi registro e información de Georent';
     const payload = `${message}\n\n- Nombre: ${userName}\n- Correo: ${userEmail}`;
     enviarWhatsapp(phone, payload);
   };
