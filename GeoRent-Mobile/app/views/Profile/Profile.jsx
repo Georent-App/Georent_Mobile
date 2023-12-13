@@ -35,11 +35,11 @@ export function Profile() {
   };
 
   const sendRequestDeleteUserDataEmail = async () => {
-    // if (!user) return;
     setRequestStatus('none');
+    if (!user) return;
     const requestBody = {
-      user_name: 'nombre_usuario',
-      user_email: 'correo_electronico@example.com',
+      user_name: userName,
+      user_email: userEmail,
     };
 
     const headers = {
