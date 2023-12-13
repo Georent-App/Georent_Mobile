@@ -12,5 +12,6 @@ export const styles = StyleSheet.create({
   sendButtonText: {
     color: '#fff',
     fontWeight: 'bold',
+    textAlign: 'center',
   },
 });

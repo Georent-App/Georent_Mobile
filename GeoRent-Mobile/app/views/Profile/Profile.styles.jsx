@@ -32,16 +32,10 @@ export const styles = StyleSheet.create({
   },
   hiperLinkContainer: {
     display: 'flex',
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 40,
-  },
-  deleteInfoHiperlink: {
-    color: '#2573DA',
-    fontSize: 12,
-    fontWeight: 'bold',
-    opacity: 0.25,
-    textDecorationLine: 'underline',
   },
   filters: {
     display: 'flex',

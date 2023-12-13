@@ -68,7 +68,6 @@ export function ActionWithWarningModal({
         </TouchableWithoutFeedback>
       </Modal>
     </View>
-
   );
 }
 

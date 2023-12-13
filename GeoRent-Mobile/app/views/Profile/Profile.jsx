@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import {
@@ -5,16 +6,19 @@ import {
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useAuth0 } from 'react-native-auth0';
+import axios from 'axios';
 import { Header } from '../../components/header/Header';
 import { styles } from './Profile.styles';
-import { enviarWhatsapp } from '../../helpers/RedirectContact';
+import { DeleteUserEmailModal } from '../../components/DeleteUserEmailModal/DeleteUserEmailModal';
 
 export function Profile() {
   const { user, authorize, clearSession } = useAuth0();
-
   const [sessionAvailable, setSessionAvailable] = useState(false);
   const [userName, setUserName] = useState('-');
   const [userEmail, setUserEmail] = useState('-');
+  const [deleteUserEmailModalVisible, setDeleteUserEmailModalVisible] = useState(false);
+  const [requestIsLoading, setRequestIsLoading] = useState(false);
+  const [requestStatus, setRequestStatus] = useState('none');
   const navigation = useNavigation();
 
   const handleLogout = async () => {
@@ -30,12 +34,32 @@ export function Profile() {
     }
   };
 
-  const sendMessageToWhatsApp = () => {
-    if (!user) return;
-    const phone = '+56992679247';
-    const message = 'Hola, quisiera eliminar mi registro e información de Georent';
-    const payload = `${message}\n\n- Nombre: ${userName}\n- Correo: ${userEmail}`;
-    enviarWhatsapp(phone, payload);
+  const sendRequestDeleteUserDataEmail = async () => {
+    // if (!user) return;
+    setRequestStatus('none');
+    const requestBody = {
+      user_name: 'nombre_usuario',
+      user_email: 'correo_electronico@example.com',
+    };
+
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+
+    const url = 'https://nlzitehgk8.execute-api.us-east-1.amazonaws.com/Prod/deleteUserData';
+
+    try {
+      setRequestIsLoading(true);
+      const response = await axios.post(url, requestBody, { headers });
+      if (response.status === 200) {
+        setRequestStatus('success');
+      }
+      setRequestIsLoading(false);
+    } catch (error) {
+      setRequestIsLoading(false);
+      setRequestStatus('error');
+      return { error: true, msge: error.response.data.msg };
+    }
   };
 
   const ShowUserProfile = (
@@ -92,9 +116,17 @@ export function Profile() {
         <Header />
         {ShowUserProfile}
         <View style={styles.hiperLinkContainer}>
-          <TouchableOpacity onPress={sendMessageToWhatsApp}>
-            <Text style={styles.deleteInfoHiperlink}>Solicitar eliminar información</Text>
-          </TouchableOpacity>
+          <DeleteUserEmailModal
+            modalVisible={deleteUserEmailModalVisible}
+            setModalVisible={setDeleteUserEmailModalVisible}
+            action={sendRequestDeleteUserDataEmail}
+            actionText="Solicitar eliminar información"
+            buttonText="Enviar"
+            requestIsLoading={requestIsLoading}
+            requestStatus={requestStatus}
+            setRequestStatus={setRequestStatus}
+            userEmail={userEmail}
+          />
         </View>
       </View>
     ) : (
