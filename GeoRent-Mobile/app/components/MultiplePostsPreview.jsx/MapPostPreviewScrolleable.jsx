@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as Animatable from 'react-native-animatable';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { addPointsToNumber } from '../../helpers/numberFormatter';
-import { styles } from './MapPostPreview.styles';
+import { styles } from './MultiplePostPreview.styles';
 import { API_URL } from '../../constants';
 import PlaceholderImg from '../../../assets/placeholder-image.png';
 
@@ -30,7 +30,7 @@ const slideOutLeft = {
   },
 };
 
-const MapPostPreview = forwardRef(({ post, isOpen, setIsOpen }, ref) => {
+const MapPostPreviewScrolleable = forwardRef(({ post, isOpen, setIsOpen }, ref) => {
   const navigation = useNavigation();
   let postPreviewRef;
 
@@ -43,7 +43,7 @@ const MapPostPreview = forwardRef(({ post, isOpen, setIsOpen }, ref) => {
   }));
 
   const onPress = () => {
-    navigation.navigate('Inicio', { screen: 'PropertyDetail', params: { post } });
+    navigation.navigate('PropertyDetail', { post });
   };
 
   const checkIfAreImages = () => {
@@ -128,10 +128,10 @@ const MapPostPreview = forwardRef(({ post, isOpen, setIsOpen }, ref) => {
 });
 
 export default forwardRef((props, ref) => (
-  <MapPostPreview {...props} ref={ref} />
+  <MapPostPreviewScrolleable {...props} ref={ref} />
 ));
 
-MapPostPreview.propTypes = {
+MapPostPreviewScrolleable.propTypes = {
   post: PropTypes.shape({
     name: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
@@ -152,6 +152,6 @@ MapPostPreview.propTypes = {
   setIsOpen: PropTypes.func.isRequired,
 };
 
-MapPostPreview.defaultProps = {
+MapPostPreviewScrolleable.defaultProps = {
   post: null,
 };

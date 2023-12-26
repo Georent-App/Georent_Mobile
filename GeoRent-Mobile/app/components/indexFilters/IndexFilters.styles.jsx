@@ -1,9 +1,10 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
-const windowHeight = Dimensions.get('window').height;
+const windowHeight = Dimensions.get('screen').height;
 const headerHeight = 70;
 const footerHeight = 65;
-const containerHeight = windowHeight - headerHeight - footerHeight;
+const headerNavbarHeight = 65;
+const containerHeight = windowHeight - headerHeight - footerHeight - headerNavbarHeight;
 
 export const styles = StyleSheet.create({
   container: {

@@ -1,9 +1,10 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
-const windowHeight = Dimensions.get('window').height;
-const headerHeight = 120;
+const windowHeight = Dimensions.get('screen').height;
+const headerHeight = 70;
 const footerHeight = 65;
-const containerHeight = windowHeight - headerHeight - footerHeight;
+const headerNavbarHeight = 65;
+const containerHeight = windowHeight - headerHeight - footerHeight - headerNavbarHeight;
 
 export const styles = StyleSheet.create({
   container: {
@@ -87,9 +88,30 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#E5E5E5',
-    paddingVertical: 10,
+    paddingTop: 15,
     gap: 10,
-    marginBottom: 5,
+  },
+  maxPriceContainer: {
+    display: 'flex',
+    width: '100%',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#E5E5E5',
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    gap: 10,
+  },
+  checkboxContainer: {
+    display: 'flex',
+    width: '100%',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    backgroundColor: '#E5E5E5',
+    paddingVertical: 5,
+    gap: 10,
+    marginBottom: 10,
   },
   counterContainer: {
     display: 'flex',

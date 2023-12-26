@@ -1,18 +1,13 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import PropTypes from 'prop-types';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { styles } from './BackButton.styles';
 
-export function BackButton({ backRoute }) {
+export function BackButton() {
   const navigation = useNavigation();
 
   const handleTouch = () => {
-    if (backRoute) {
-      navigation.navigate(backRoute);
-      return;
-    }
     navigation.goBack();
   };
 
@@ -29,11 +24,3 @@ export function BackButton({ backRoute }) {
     </TouchableOpacity>
   );
 }
-
-BackButton.propTypes = {
-  backRoute: PropTypes.string,
-};
-
-BackButton.defaultProps = {
-  backRoute: null,
-};

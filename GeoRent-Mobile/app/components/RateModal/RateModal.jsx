@@ -11,14 +11,14 @@ import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
 import Slider from '@react-native-community/slider';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth0 } from 'react-native-auth0';
 import { styles } from './RateModal.styles';
 import { API_URL } from '../../constants';
 import { Toast } from '../Toast/Toast';
 import { ButtonGeoR } from '../ButtonGeoR/ButtonGeoR';
 
 export function RateModal({ postId }) {
-  const { authState } = useAuth();
+  const { user, getCredentials } = useAuth0();
   const [modalVisible, setModalVisible] = useState(false);
   const [evaluationValue, setEvaluationValue] = useState(1);
   const [showToast, setShowToast] = useState(false);
@@ -31,16 +31,23 @@ export function RateModal({ postId }) {
   };
 
   const submitEvaluation = async () => {
-    if (!authState.authenticated) {
+    if (!user) {
       setToastMessage('Debes iniciar sesión para poder evaluar una propiedad.');
       setIsError(false);
       return setShowToast(true);
     }
     try {
+      const credentials = await getCredentials();
+      const { accessToken } = credentials;
       setIsButtonDisabled(true);
       await axios.post(`${API_URL}/ratings/create`, {
         post: postId,
         value: evaluationValue.toFixed(1),
+      }, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
       });
       setIsButtonDisabled(false);
       setToastMessage('¡Evaluación enviada exitosamente!');

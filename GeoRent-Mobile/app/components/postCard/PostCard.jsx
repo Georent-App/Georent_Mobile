@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, Image } from 'react-native';
+import {
+  View, Text, Image, TouchableOpacity,
+} from 'react-native';
 import { styles } from './PostCard.styles';
 import { addPointsToNumber } from '../../helpers/numberFormatter';
 import { API_URL } from '../../constants';
@@ -16,21 +18,29 @@ import tradesAndServicesIcon from '../../../assets/TradesAndServices-icon.png';
 export function PostCard({ post }) {
   const navigation = useNavigation();
 
-  const handleTouch = () => {
+  const handlePress = () => {
     navigation.navigate('PropertyDetail', { post });
   };
 
+  const checkIfAreImages = () => {
+    if (post.images === null) {
+      return false;
+    } if (post.images.length === 0) {
+      return false;
+    }
+    return true;
+  };
+
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={handlePress}>
       <View
         style={styles.shadow}
-        onTouchEnd={handleTouch}
       >
         {post.type === 'CAMPING' && (
-          <Image
-            source={CampingIcon}
-            style={styles.typeIcon}
-          />
+        <Image
+          source={CampingIcon}
+          style={styles.typeIcon}
+        />
         )}
         {post.type === 'SERVICE' && (() => {
           if (post.category === 'FOOD') {
@@ -44,7 +54,7 @@ export function PostCard({ post }) {
           }
           return null;
         })()}
-        {post.images[0] ? (
+        {checkIfAreImages() ? (
           <Image
             source={{ uri: `${API_URL}${post.images[0].url}` }}
             style={styles.image}
@@ -93,17 +103,23 @@ export function PostCard({ post }) {
           </Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
 PostCard.propTypes = {
   post: PropTypes.shape({
     id: PropTypes.number.isRequired,
-    images: PropTypes.arrayOf(PropTypes.shape({
-      url: PropTypes.string.isRequired,
-      id: PropTypes.number.isRequired,
-    })).isRequired,
+    images: PropTypes.oneOfType([
+      PropTypes.shape({
+        id: PropTypes.number,
+        url: PropTypes.string,
+      }),
+      PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number,
+        url: PropTypes.string,
+      })),
+    ]),
     type: PropTypes.string.isRequired,
     category: PropTypes.string,
     name: PropTypes.string.isRequired,

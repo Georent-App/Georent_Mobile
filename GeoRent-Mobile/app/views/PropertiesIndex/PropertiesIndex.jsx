@@ -21,6 +21,7 @@ import { useLocation } from '../../context/LocationContext';
 import { useNearPosts } from '../../hooks/NearPosts';
 import IndexFilters from '../../components/indexFilters/IndexFilters';
 import { Toast } from '../../components/Toast/Toast';
+import searchPostByContent from '../../helpers/searchPostByContent';
 
 export function PropertiesIndex() {
   const [loading, setLoading] = useState(true);
@@ -44,12 +45,23 @@ export function PropertiesIndex() {
     availability: 'all',
     singleBeds: '-',
     doubleBeds: '-',
+    maxPrice: '-1',
   });
+  const [contentSearch, setContentSearch] = useState('');
   const [isService, setIsService] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [postMaxPrice, setPostMaxPrice] = useState(0);
 
   const scrollViewRef = useRef();
+
+  const setPostMaxPriceFromPosts = () => {
+    if (posts.length === 0) {
+      return;
+    }
+    const maxPrice = Math.max(...posts.map((post) => post.price));
+    setPostMaxPrice(maxPrice);
+  };
 
   async function fetchPosts(loc, rad, page, filts) {
     try {
@@ -61,6 +73,7 @@ export function PropertiesIndex() {
         availability: filts.availability,
         single_beds: filts.singleBeds === '-' ? -1 : filts.singleBeds,
         double_beds: filts.doubleBeds === '-' ? -1 : filts.doubleBeds,
+        max_price: filts.maxPrice ? filts.maxPrice : 0,
       };
       if (filts.type.includes('SERVICE')) {
         filtersForRequest.order = 'nearest';
@@ -84,6 +97,12 @@ export function PropertiesIndex() {
       return [];
     }
   }
+
+  useEffect(() => {
+    if (posts.length > 0) {
+      setPostMaxPriceFromPosts();
+    }
+  }, [posts]);
 
   const loadMorePosts = async () => {
     if (isLoadingMore) return;
@@ -120,7 +139,8 @@ export function PropertiesIndex() {
       setCurrentRadius(newFilters.radius);
       setCurrentPage(1);
       const newPosts = await fetchPosts(location, newFilters.radius, 1, newFilters);
-      setPosts(newPosts);
+      const postFilteredByContent = searchPostByContent(newPosts, contentSearch);
+      setPosts(postFilteredByContent);
       setFiltersLoading(false);
       scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: true });
     } catch (error) {
@@ -184,6 +204,8 @@ export function PropertiesIndex() {
           filtersLoading={filtersLoading}
           onSubmit={handleFiltersSubmit}
           isService={isService}
+          postMaxPrice={postMaxPrice}
+          setContentSearch={setContentSearch}
         />
         <ScrollView
           ref={scrollViewRef}
@@ -203,7 +225,6 @@ export function PropertiesIndex() {
           scrollEventThrottle={16}
           onTouchEnd={() => setFiltersOpen(false)}
         >
-
           <View style={styles.header}>
             <Text style={styles.title}> Cerca de ti </Text>
             <View style={styles.row}>

@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
   container: {
     backgroundColor: '#000',
+    flex: 1,
   },
   imageContainer: {
     height: 450,
@@ -88,7 +89,12 @@ export const styles = StyleSheet.create({
   },
   footerText: {
     marginLeft: 10,
-    color: '#888',
+    color: 'black',
+  },
+  hiprelinkText: {
+    marginLeft: 10,
+    color: 'blue',
+    textDecorationLine: 'underline',
   },
   scrollViewContent: {
     flexGrow: 1,

@@ -6,7 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { styles } from './MapSearch.styles';
 
-const GOOGLE_API_KEY = 'AIzaSyB8ZY1bvvsQpYvq9JFLcBUEY3QoyEwJchg';
+const GOOGLE_API_KEY = 'AIzaSyCQ6HQl0_P1j5KMIOjUVxvJSvfYgZsY9Kw';
 
 const MapSearch = forwardRef(({
   goToSearchedLocation, focus, onFocus, onBlur,
