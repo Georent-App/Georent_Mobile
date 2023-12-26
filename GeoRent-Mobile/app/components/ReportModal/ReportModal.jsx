@@ -11,14 +11,14 @@ import {
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { useAuth0 } from 'react-native-auth0';
 import { API_URL } from '../../constants';
 import { styles } from './ReportModal.styles';
 import { ButtonGeoR } from '../ButtonGeoR/ButtonGeoR';
 import { Toast } from '../Toast/Toast';
-import { useAuth } from '../../context/AuthContext';
 
 export function ReportModal({ postId }) {
-  const { authState } = useAuth();
+  const { user, getCredentials } = useAuth0();
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [isError, setIsError] = useState(false);
@@ -30,16 +30,23 @@ export function ReportModal({ postId }) {
   };
 
   const handleReport = async () => {
-    if (!authState.authenticated) {
+    if (!user) {
       setToastMessage('Debes iniciar sesión para poder reprotar una propiedad.');
       setIsError(false);
       return setShowToast(true);
     }
     try {
+      const credentials = await getCredentials();
+      const { accessToken } = credentials;
       setIsButtonDisabled(true);
       await axios.post(`${API_URL}/reports/create`, {
         post: postId,
         comment: reportText,
+      }, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
       });
       setIsButtonDisabled(false);
       setToastMessage('¡Reporte enviado exitosamente!');

@@ -9,6 +9,14 @@
     "icon": "./assets/icon.png",
     "primaryColor": "#ffffff",
     "userInterfaceStyle": "light",
+    "plugins": [
+      [
+        "react-native-auth0",
+        {
+          "domain": "georent-mobile.us.auth0.com"
+        }
+      ]
+    ],
     "splash": {
       "image": "./assets/splash.png",
       "imageResizeMode": "contain",
@@ -23,14 +31,15 @@
       "config": {
         "usesNonExemptEncryption": false,
         "googleMapsApiKey": "AIzaSyB8ZY1bvvsQpYvq9JFLcBUEY3QoyEwJchg"
-      }
+      },
+      "bundleIdentifier": "com.prod.georentmobile"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.hebusch.GeoRentMobile",
+      "package": "com.prod.georentmobile",
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyB8ZY1bvvsQpYvq9JFLcBUEY3QoyEwJchg"

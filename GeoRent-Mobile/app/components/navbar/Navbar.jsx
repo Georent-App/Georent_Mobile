@@ -3,12 +3,11 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { SafeAreaView, Platform, View } from 'react-native';
+import { useAuth0 } from 'react-native-auth0';
 import PropertiesStack from '../../router/PropertyStack';
-import AccountStack from '../../router/SessionStack';
 import ProfileStack from '../../router/ProfileStack';
-import { Home } from '../../views';
+import HomeStack from '../../router/HomeStack';
 import { styles } from './Navbar.styles';
-import { useAuth } from '../../context/AuthContext';
 import { abrirPaginaWeb } from '../../helpers/RedirectContact';
 
 const Tab = createBottomTabNavigator();
@@ -30,8 +29,7 @@ function getTabBarIcon(route, focused, color) {
 }
 
 export function NavBar() {
-  const { authState } = useAuth();
-
+  const { user } = useAuth0();
   const EmptyComponent = () => null;
 
   const content = (
@@ -44,7 +42,7 @@ export function NavBar() {
         tabBarLabelStyle: [{ display: 'flex', fontSize: 13, marginBottom: 8 }],
       })}
     >
-      <Tab.Screen style={styles.iconStyle} name="Inicio" component={Home} />
+      <Tab.Screen style={styles.iconStyle} name="Inicio" component={HomeStack} />
       <Tab.Screen
         style={styles.iconStyle}
         name="Cerca mío"
@@ -63,8 +61,8 @@ export function NavBar() {
       />
       <Tab.Screen
         style={styles.iconStyle}
-        name={authState.authenticated ? 'Perfil' : 'Iniciar Sesion'}
-        component={authState.authenticated ? ProfileStack : AccountStack}
+        name={user ? 'Perfil' : 'Iniciar Sesion'}
+        component={ProfileStack}
       />
     </Tab.Navigator>
   );

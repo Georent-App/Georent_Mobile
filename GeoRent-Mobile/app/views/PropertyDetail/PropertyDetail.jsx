@@ -26,18 +26,22 @@ import { RateModal } from '../../components/RateModal/RateModal';
 import { LoadingScreen } from '../../components/loadingScreen/LoadingScreen';
 import { addPointsToNumber } from '../../helpers/numberFormatter';
 import { useLocation } from '../../context/LocationContext';
+import { ActionWithWarningModal } from '../../components/WarningModal/WarningModal';
 
 export function PropertyDetail() {
   const route = useRoute();
   const { post } = route.params;
   const scrollViewWidth = useWindowDimensions().width;
-  const scrollViewHeight = useWindowDimensions().height - 60;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [reservations, setReservations] = useState([]);
   const [showFullDescription, setShowFullDescription] = useState(false);
   const descriptionLimit = 100;
   const [loading, setLoading] = useState(true);
   const [postInfo, setPostInfo] = useState({});
+  const [locationModalVisible, setLocationModalVisible] = useState(false);
+  const [phoneModalVisible, setPhoneModalVisible] = useState(false);
+  const [emailModalVisible, setEmailModalVisible] = useState(false);
+  const [whatsappModalVisible, setWhatsappModalVisible] = useState(false);
 
   const { location } = useLocation();
 
@@ -60,13 +64,6 @@ export function PropertyDetail() {
     fetchReservations();
   }, [post]);
 
-  const containerStyle = [
-    styles.container,
-    {
-      backgroundColor: '#000',
-    },
-  ];
-
   const handleScroll = (event) => {
     const contentOffsetX = event.nativeEvent.contentOffset.x;
     const index = Math.round(contentOffsetX / scrollViewWidth);
@@ -86,7 +83,7 @@ export function PropertyDetail() {
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <StatusBar translucent={false} style="dark" backgroundColor="white" />
-        <BackButton backRoute="PropertiesIndex" />
+        <BackButton />
         <LoadingScreen />
       </SafeAreaView>
     );
@@ -104,8 +101,8 @@ export function PropertyDetail() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <StatusBar translucent={false} style="dark" backgroundColor="white" />
-      <View style={(containerStyle, { height: scrollViewHeight })}>
-        <BackButton backRoute="PropertiesIndex" />
+      <View style={styles.container}>
+        <BackButton />
         <ScrollView style={{ flex: 1 }}>
           <View style={styles.imageContainer}>
             {checkIfAreImages() ? (
@@ -152,7 +149,7 @@ export function PropertyDetail() {
                 <View style={styles.allRatingContainer}>
                   <View style={styles.ratingContainer}>
                     <View style={styles.ratingIconContainer}>
-                      <Icon name="star" size={20} color="gold" />
+                      <Icon name="star" size={25} color="gold" />
                     </View>
                     <Text style={styles.ratingValue}>{postInfo.rating_average.toFixed(1)}</Text>
                     <Text style={styles.ratingText}>estrellas de 5</Text>
@@ -234,40 +231,56 @@ export function PropertyDetail() {
               <Text style={styles.cardTitle}>Información de Contacto</Text>
               <View style={styles.propertyInfoContainer}>
                 <View style={styles.footerItem}>
-                  <Icon name="user" size={20} color="#696969" />
+                  <Icon name="user" size={25} color="#696969" />
                   <Text style={styles.footerText}>{postInfo.contact_name}</Text>
                 </View>
                 <View style={styles.footerItem}>
-                  <Icon name="map-marker" size={20} color="red" />
-                  <TouchableWithoutFeedback onPress={
-                    () => abrirMapa(postInfo.latitude, postInfo.longitude, location)
-                  }
-                  >
-                    <Text style={styles.hiprelinkText}>
-                      {getPostAddressPlusDpto(postInfo)}
-                    </Text>
-                  </TouchableWithoutFeedback>
+                  <ActionWithWarningModal
+                    message="¿Ir a ubicación?"
+                    modalVisible={locationModalVisible}
+                    setModalVisible={setLocationModalVisible}
+                    action={() => abrirMapa(postInfo.latitude, postInfo.longitude, location)}
+                    icon="map-marker"
+                    actionText={getPostAddressPlusDpto(postInfo)}
+                    iconColor="red"
+                    buttonText="Ir a ubicación"
+                  />
                 </View>
                 <View style={styles.footerItem}>
-                  <Icon name="phone" size={20} color="black" />
-                  <TouchableWithoutFeedback onPress={() => hacerLlamada(postInfo.phone_number)}>
-                    <Text style={styles.hiprelinkText}>{postInfo.phone_number}</Text>
-                  </TouchableWithoutFeedback>
+                  <ActionWithWarningModal
+                    message="¿Contactar al anfitrión?"
+                    modalVisible={phoneModalVisible}
+                    setModalVisible={setPhoneModalVisible}
+                    action={() => hacerLlamada(postInfo.phone_number)}
+                    icon="phone"
+                    actionText={postInfo.phone_number}
+                    iconColor="blue"
+                    buttonText="Llamar"
+                  />
                 </View>
-                <View
-                  style={styles.footerItem}
-                  onTouchEnd={() => abrirWhatsApp(postInfo.phone_number)}
-                >
-                  <Icon name="whatsapp" size={20} color="green" />
-                  <TouchableWithoutFeedback>
-                    <Text style={styles.hiprelinkText}>{postInfo.phone_number}</Text>
-                  </TouchableWithoutFeedback>
+                <View style={styles.footerItem}>
+                  <ActionWithWarningModal
+                    message="¿Contactar al anfitrión?"
+                    modalVisible={whatsappModalVisible}
+                    setModalVisible={setWhatsappModalVisible}
+                    action={() => abrirWhatsApp(postInfo.phone_number)}
+                    icon="whatsapp"
+                    actionText={postInfo.phone_number}
+                    iconColor="green"
+                    buttonText="WhatsApp"
+                  />
                 </View>
-                <View style={styles.footerItem} onTouchEnd={() => abrirEmail(postInfo.email)}>
-                  <Icon name="envelope" size={20} color="blue" />
-                  <TouchableWithoutFeedback>
-                    <Text style={styles.hiprelinkText}>{postInfo.email}</Text>
-                  </TouchableWithoutFeedback>
+                <View style={styles.footerItem}>
+                  <ActionWithWarningModal
+                    message="¿Contactar al anfitrión?"
+                    modalVisible={emailModalVisible}
+                    setModalVisible={setEmailModalVisible}
+                    action={() => abrirEmail(postInfo.email)}
+                    icon="envelope"
+                    actionText={postInfo.email}
+                    iconColor="blue"
+                    buttonText="Email"
+                  />
                 </View>
                 { postInfo.web_site
                   && (
@@ -277,9 +290,9 @@ export function PropertyDetail() {
                     () => abrirPaginaWeb(postInfo.web_site)
                   }
                   >
-                    <Icon name="link" size={20} color="#696969" />
+                    <Icon name="link" size={25} color="#696969" />
                     <TouchableWithoutFeedback>
-                      <Text style={styles.footerText}>{postInfo.web_site}</Text>
+                      <Text style={styles.hiprelinkText}>{postInfo.web_site}</Text>
                     </TouchableWithoutFeedback>
                   </View>
                   )}
@@ -291,9 +304,9 @@ export function PropertyDetail() {
                     () => abrirPaginaWeb(postInfo.social_network_1)
                   }
                   >
-                    <Icon name="facebook" size={20} color="#696969" />
+                    <Icon name="facebook" size={25} color="#696969" />
                     <TouchableWithoutFeedback>
-                      <Text style={styles.footerText}>{postInfo.social_network_1}</Text>
+                      <Text style={styles.hiprelinkText}>{postInfo.social_network_1}</Text>
                     </TouchableWithoutFeedback>
                   </View>
                   )}
@@ -305,9 +318,9 @@ export function PropertyDetail() {
                     () => abrirPaginaWeb(postInfo.social_network_2)
                   }
                   >
-                    <Icon name="instagram" size={20} color="#696969" />
+                    <Icon name="instagram" size={25} color="#696969" />
                     <TouchableWithoutFeedback>
-                      <Text style={styles.footerText}>{postInfo.social_network_2}</Text>
+                      <Text style={styles.hiprelinkText}>{postInfo.social_network_2}</Text>
                     </TouchableWithoutFeedback>
                   </View>
                   )}
